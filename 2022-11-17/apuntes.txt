@@ -1,0 +1,17 @@
+    Se envió el excel de hospitalizacion a las 8.00
+
+/*****************************************************/
+    indicaciones del Ing.
+    -Ch. enviar imagenes
+    -encuestas antes del mediodia
+    
+    1-Sms y correo - de comunicacion a personal asistencial
+    2-Pdf reporte operatorio ( se quiere que se vea firmado para el viernes )
+
+
+proceso cierre programacion
+-> llama a un sp 
+
+/*****************************************************/
+
+investigar envio de mensajes a whatsapp 

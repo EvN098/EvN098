@@ -1,0 +1,29 @@
+explicacion chicoma bd sigh-digital -> firma digital de centro quirúrgico
+1.15 -> explicacion en galenhos de los documentos involucrados en el requerimiento
+2.20 - 13.50 -> movPreFirmaDigital
+6.22 - 7.50 -> tabformatodigital
+8.30 - 10.30 -> archivosDigitalConfiguracionNumerador
+
+11.00 - 13.50 -> movPreArchivoDigitalCab, movPreArchivoDigitalDet
+14.00 -  -> 
+
+
+tabTipoProcesoDigital                       x    
+tabFormatoDigital                           x
+tabFirmaDigitalProcesoNumerador             x            
+tabFirmaDigitalProceso                      x    
+tabArchivosDigitalExtension                 x        
+tabArchivosDigitalConfiguracionNumerador    x                        
+tabArchivosDigitalConfiguracion             x           
+
+movPreFirmaDigital                          x
+movPreArchivosDigitalDet                    x        
+movPreArchivosDigitalCab                    x        
+movFirmaDigitalProceso                      x  
+MovProcesoFirmaProveedor                            
+movFirmaDigital                             x
+movDocumentoRecepcion                       x    
+movArchivosDigitalDet                       x    
+movArchivosDigitalCab                       x    
+
+15

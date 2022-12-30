@@ -1,0 +1,18 @@
+Reunion 9.30:
+-rellenar los tiempos en kanban
+trabajar con ing Luis para comenzar a ver mantenimientos de vb 
+
+envio del informe de tdr 
+
+se hizo el query (script) de Registro de suspención de procedimientos Sub Unidad de pediatría
+-> verificar el query con chicoma 
+
+checkar video de programacion de vb 
+
+- se me comenta que mas tarde se revisará un error relacionado con un proceso que involucra a digemid,
+ésta envía exporta sus datos a un excel , de ese excel nosotros subimos la data a la bd y galenos lo muestra,
+identificar de donde sale el error de tipificacion o conversion de un campo donde se está cambiando la palabra "apósitos" a "apásitos".
+    -> corregir mañana 22/11/2022
+
+- revisar correo actualizacion de microbianos
+

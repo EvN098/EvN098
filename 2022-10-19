@@ -1,0 +1,170 @@
+/************************************************************************************/
+Código sql server para ayuda: 
+/************************************************************************************/
+--ap / sol / pa / tse / eje / sala / ser / atesol / tu / 
+select 
+ap.idSolicitudQx      
+,sol.NroSolicitud      
+,sol.FechaSolicitud      
+,ap.FechaAprobado      
+,ap.idCuentaSolicitante      
+,ap.idPaciente      
+,pa.NroHistoriaClinica       
+,pa.ApellidoPaterno +' '+pa.ApellidoMaterno+', '+pa.PrimerNombre+' '+isnull(pa.SegundoNombre,'')  as Paciente      
+,pa.ApellidoPaterno      
+,pa.ApellidoMaterno      
+,pa.PrimerNombre      
+,isnull(pa.SegundoNombre,'')  as SegundoNombre      
+,sol.Peso      
+,tse.Descripcion as Sexo      
+,ap.idServicio      
+,ap.idServicioOpera       
+,upper(eje.Descripcion) as ServicioOpera      
+,upper(sala.Nombre) as Sala      
+,ap.idSala       
+,ser.Nombre as ServicioSolicitante      
+,ap.idCama      
+,case when atesol.IdTipoServicio=1 then 'AMBULATORIO' ELSE ISNULL(ca.Codigo,'') END as CodigoCama      
+,ap.FechaProgramada      
+,ap.HoraInicioProgramada      
+,ap.HoraFinProgramada      
+,ap.idTurnoIntervencion      
+,tu.Descripcion as Turno      
+,ap.idTipoIntervencion      
+,   null  as TipoIntervencion  --ti.Descripcion      
+,ap.idTipoAnestesia      
+,tia.Descripcion as TipoAnestesia      
+,ro.idMedicoPrincipal      
+,upper(emp.ApellidoPaterno+' '+emp.ApellidoMaterno+' '+emp.Nombres)  as MedicoPrincipal      
+,mep.Colegiatura as cmpmep      
+,mep.rne  as rnemep      
+,ro.idMedicoAyudante1      
+,upper(emayu1.ApellidoPaterno+' '+emayu1.ApellidoMaterno+' '+emayu1.Nombres)  as MedicoAyudante1      
+,meayu1.Colegiatura as cmpayu1      
+,ro.idMedicoAyudante2      
+,upper(emayu2.ApellidoPaterno+' '+emayu2.ApellidoMaterno+' '+emayu2.Nombres)  as MedicoAyudante2      
+,meayu2.Colegiatura as cmpayu2      
+,ro.idMedicoAnestesiologo1       
+,upper(emane1.ApellidoPaterno+' '+emane1.ApellidoMaterno+' '+emane1.Nombres)  as MedicoAnestesiologo1      
+,meane1.Colegiatura as cmpane1      
+,ro.idMedicoAnestesiologo2       
+,upper(emane2.ApellidoPaterno+' '+emane2.ApellidoMaterno+' '+emane2.Nombres)  as MedicoAnestesiologo2      
+,meane2.Colegiatura as cmpane2      
+,ro.idInstrumentista        
+,upper(eminst.ApellidoPaterno+' '+eminst.ApellidoMaterno+' '+eminst.Nombres)  as Instrumentista      
+,licinst.Colegiatura as cmpinst      
+,ro.idCirculante       
+,upper(emcir.ApellidoPaterno+' '+emcir.ApellidoMaterno+' '+emcir.Nombres)  as Circulante      
+,liccir.Colegiatura as cmpcir      
+,[dbo].[fu_EdadAñoMesDia](pa.FechaNacimiento,ro.FechaCirugia) as Edad      
+,ro.Hallazgos      
+,ro.fechaCirugia      
+,ro.HoraFinReal      
+,ro.HoraInicioReal      
+,ro.IdDestinoAtencion      
+,tdt.Descripcion as DestinoAtencion      
+,ro.IdRecetaAnatomiaPat      
+,ro.idReporteOperatorio      
+,Incidentes=replace(replace(ro.Incidentes,CHAR(13),' -'),char(10),' ')      
+,Complicaciones=replace(replace(isnull(ro.Complicaciones,''),CHAR(13),' -'),char(10),' ')      
+,ro.Materiales      
+,ro.IndAnatomiaPat      
+,ro.DesIdServiciocripcionAnatomiaPat      
+,ro.NroReporte      
+,Procedimiento= replace(replace(ro.Procedimiento,CHAR(13),' -'),char(10),' ')      
+,fo.IdOrden       
+,sol.idTipoSolicitud 
+, ro.fechafincirugia     
+/********/
+, dia.CodigoCIE10_PreOpe
+,dia.Descripcion_PreOpe
+
+from ReporteOperatorio ro      
+ inner join AprobadosQx ap on ap.idAprobadoQx=ro.idAprobadoQx       
+ inner join SolicitudQx sol on ap.idSolicitudQx=sol.idSolicitudQx      
+ inner join Atenciones atesol on sol.idCuentaAtencion=atesol.IdCuentaAtencion      
+ inner join Pacientes pa on ap.idPaciente=pa.IdPaciente      
+ inner join TiposSexo  tis on pa.IdTipoSexo =tis.IdTipoSexo       
+ left join Servicios ser on ap.idServicio=ser.IdServicio      
+LEFT join Eje on ap.idServicioOpera=Eje.IdEje      
+left join Servicios sala on ap.idSala =sala.IdServicio      
+left join TiposServicio ts on ser.IdServicio=ts.IdTipoServicio      
+left join TiposSexo tse on pa.IdTipoSexo=tse.IdTipoSexo      
+left join Camas ca on ap.idCama=ca.IdCama      
+left join TiposDestinoAtencion tdt on ro.IdDestinoAtencion=tdt.IdDestinoAtencion       
+left join TurnoIntervencionQx tu on ap.idTurnoIntervencion=Tu.idTurnoIntervencion      
+left join TipoIntervencionQx ti on ap.idTipoIntervencion =ti.idTipoIntervencion      
+left join TipoAnestesiaQx tia on ap.idTipoAnestesia =tia.idTipoAnestesia      
+left join Medicos mep on ro.idMedicoPrincipal=mep.IdMedico      
+left join Empleados emp on mep.IdEmpleado=emp.IdEmpleado      
+left join Medicos meayu1  on ro.idMedicoAyudante1=meayu1.IdMedico      
+left join Empleados emayu1  on meayu1.IdEmpleado=emayu1.IdEmpleado      
+left join Medicos meayu2  on ro.idMedicoAyudante2=meayu2.IdMedico      
+left join Empleados emayu2  on meayu2.IdEmpleado=emayu2.IdEmpleado      
+left join Medicos meane1  on ro.idMedicoAnestesiologo1  =meane1.IdMedico      
+left join Empleados emane1  on meane1.IdEmpleado=emane1.IdEmpleado      
+left join Medicos meane2  on ro.idMedicoAnestesiologo2  =meane2.IdMedico      
+left join Empleados emane2  on meane2.IdEmpleado=emane2.IdEmpleado      
+left join Medicos licinst  on ro.idInstrumentista  =licinst.IdMedico       
+left join Empleados eminst  on licinst.IdEmpleado=eminst.IdEmpleado      
+left join Medicos liccir  on ro.idCirculante  =liccir.IdMedico       
+left join Empleados emcir  on liccir.IdEmpleado=emcir.IdEmpleado      
+left join FactOrdenServicio fo on ro.idReporteOperatorio=fo.idReporteOperatorio
+/********/
+left join SolicitudQxDiagnosticos qx on qx.idSolicitudQx = sol.idSolicitudQx
+left join Diagnosticos dia on qx.IdDiagnostico = dia.IdDiagnostico
+
+left join ReporteOperatorioDiagnosticos rod 
+
+/********/
+where ro.idReporteOperatorio =--@IdReporteOperatorio  
+22264
+
+SELECT TABLE_CATALOG, TABLE_NAME, COLUMN_NAME, DATA_TYPE
+FROM Information_Schema.Columns
+WHERE TABLE_NAME = 'SolicitudQx'
+and COLUMN_NAME in (
+'idSolicitudQx',
+'FechaAprobado',
+'idCuentaSolicitante',
+'idPaciente',
+'idServicio',
+'idServicioOpera',
+'idSala',
+'idCama',
+'FechaProgramada',
+'HoraInicioProgramada',
+'HoraFinProgramada',
+'idTurnoIntervencion',
+'idTipoIntervencion',
+'idTipoAnestesia'
+)
+ORDER BY COLUMN_NAME
+
+
+
+SELECT TABLE_CATALOG, TABLE_NAME, COLUMN_NAME, DATA_TYPE
+FROM Information_Schema.Columns
+WHERE TABLE_NAME = 'SolicitudQx'
+and COLUMN_NAME in (
+'idSolicitudQx',
+'FechaAprobado',
+'idCuentaSolicitante',
+'idPaciente',
+'idServicio',
+'idServicioOpera',
+'idSala',
+'idCama',
+'FechaProgramada', 
+'HoraInicioProgramada',
+'HoraFinProgramada',
+'idTurnoIntervencion',
+'idTipoIntervencion',
+'idTipoAnestesia'
+)
+
+
+
+//hay un campo comentando en el store procedure "Descripcion"
+tipo cirujia -> emergencia programada
+tabla -> TipoIntervencionQx ( idTipoIntervencion, Descripcion )

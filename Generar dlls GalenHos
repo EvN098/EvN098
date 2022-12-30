@@ -1,0 +1,20 @@
+servidor de las fuentes : 
+\\SRVDB05\sisgalenplus$
+Las actualizaciones para el paso a produccion se pasan
+mediante un informe en word al ing Edder.
+
+Posteriormente se cambia la fecha en la imagen "splash"
+
+C:\Program Files (x86)\Digital Works Corporation
+
+sisgalenplus\prerelease
+-> archivos bat ordenados por nombre (ejecutar en ese orden)
+al ejecutar un .bat generará en esa carpeta varios archivos.
+Entre esos archivos buscamos un proyecto, lo abrimos en el vb
+    -> dentro del visual: archivo generar dll
+    (proceso valido para las primeras 3 dlls, posterior a eso
+    pedirá referencias a diferentes dlls para poder abrirse 
+    y poder generar las dlls)
+
+
+C:\Program Files (x86)\Digital Works Corporation\GalenHos

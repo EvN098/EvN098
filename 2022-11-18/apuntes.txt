@@ -1,0 +1,30 @@
+- Capacitacion sobre generacion de scripts por parte del ing chicoma
+
+ruta scripts:
+\\SRVDB05\desarrollo$\0-Scripts$
+
+script: Script - Diagnosticos-MedicosProduccion.sql 
+-> script donde se extrae la data de los diagnosticos
+de los doctores 
+-> el script se genera juntando varias consultas de areas 
+diferentes en diagnostico.
+
+
+preguntar al ing. Chicoma porque aparece el campo "Observación" si este 
+servicio corresponde a emergencia
+
+
+/****************************************
+PRESENTACION DE PRODUCTO:
+(fecha 21/11/2022)
+
+-Orden de Servicio
+-Acta de Conformidad ( esto no esta )
+-Recibo por honorarios (firmado en 01 solo juego)
+-Consulta de Validez de comprobante de pago electrónico
+-Suspensión de 4ta categoría (si se aplica)
+-Ficha RUC
+-Constancia de RNP
+-Informe de Actividades (anexando a los reportes de sustento de las actividades realizadas, según TDR)
+-Declaración Jurada
+-CCI (cuenta bancaria deberá estar vinculada a su RUC)

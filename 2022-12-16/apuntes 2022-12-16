@@ -1,0 +1,32 @@
+apuntes 2022-12-16
+
+se crearon las tablas: 
+    select * from AlertaReporte 
+    select * from AlertaReportedestinatarios
+
+cambiar el nombre de las tablas creadas para alertas, copiar la data de origen de alertalaboratorio
+
+Estandar en nomenclatura de tablas : 
+    - tab -> tablas que puedan ser de configuracion, no crecen con el tiempo
+    - mov -> tablas de movimiento , crecen con el tiempo, estan en constante cambio
+    - mae -> tablas maestras
+    - res -> tablas de resumen
+
+tabAlertaMensajeria 
+
+pendiente : --recibir de luis un script y filtrar según lo requerido
+cito correo: 
+
+correo2 ing. David: "Erick, por favor generar esta información.
+Luis te enviará los script, los filtras según lo requerido."
+
+correo1 sharon shanchez zela:
+"Buenos días,
+Por encargo del Dr. Trigoso, Jefe de Dpto. de la SUAIEPCNP,  se solicita Información del consumo mensual en el centro de costos de Neonatología de "paracetamol 10 mg/mL 100 mL inyectable"(Cod SISMED 34998), desde noviembre 2021 hasta octubre 2022, dado que debemos sustentar y actualizar el uso del medicamento en mención frente al comité farmacoterapeutico.
+Agradeciendo su atención."
+
+consumo mensual en centro de costos de neonatologia
+
+meneses traumtologia 
+1078
+

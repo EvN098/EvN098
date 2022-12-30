@@ -1,0 +1,11 @@
+Modulo: Consulta Externa
+-> Citas y Admision: seleccionar fecha, ayudarse del campo "filtro" para localizar al doctor, identificar el consultorio que les toca ese dia.
+-> Menu: Herramientas -> Reprogramacion Medica 
+    Medico: buscamos al medico que tiene programdo 
+    Servicio CE : buscamos el consultorio que atiende 
+    F. Atencion : dia que le tocaba atender 
+    Prog: Horario de Atencion
+
+    Reprogramacion:
+    darle check en medico que reemplaza -> seleccionar el medico que va a reemplazarla
+    darle aceptar (f12)

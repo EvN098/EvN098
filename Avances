@@ -1,0 +1,146 @@
+
+/******************************************************************************************************/
+--Armando Entidad del usp_select_ReporteOperatorioCompletoPorId_16082022
+/******************************************************************************************************/
+--cambiando los tipos de la tabla AprobadosQx
+
+public class ReporteOperatorio {
+    public int idSolicitudQx { get; set; }
+    public int NroSolicitud { get; set; }
+    public Datetime FechaSolicitud { get; set; }
+    public datetime FechaAprobado { get; set; }
+    public int idCuentaSolicitante { get; set; }
+    public int idPaciente { get; set; }
+    public int NroHistoriaClinica { get; set; }
+    public string Paciente { get; set; }
+    public string ApellidoPaterno { get; set; }
+    public string ApellidoMaterno { get; set; }
+    public string PrimerNombre { get; set; }
+    public string SegundoNombre { get; set; }
+    public decimal Peso { get; set; }
+    public string Sexo { get; set; }
+    public int idServicio { get; set; }
+    public int idServicioOpera { get; set; }
+    public string ServicioOpera { get; set; }
+    public string Sala { get; set; }
+    public int idSala { get; set; }
+    public string ServicioSolicitante { get; set; }
+    public int idCama { get; set; }
+    public string CodigoCama { get; set; }
+    public date FechaProgramada { get; set; }
+    public string HoraInicioProgramada { get; set; }
+    public string HoraFinProgramada { get; set; }
+    public int idTurnoIntervencion { get; set; }
+    public string Turno { get; set; }
+    public int idTipoIntervencion { get; set; }
+    public string Descripcion { get; set; }
+    public int idTipoAnestesia { get; set; }
+    public string TipoAnestesia { get; set; }
+    public int idMedicoPrincipal { get; set; }
+    public string MedicoPrincipal { get; set; }
+    public string cmpmep { get; set; }
+    public string rnemep { get; set; }
+    public int idMedicoAyudante1 { get; set; }
+    public string MedicoAyudante1 { get; set; }
+    public string cmpayu1 { get; set; }
+    public int idMedicoAyudante2 { get; set; }
+    public string MedicoAyudante2 { get; set; }
+    public string cmpayu2 { get; set; }
+    public int idMedicoAnestesiologo1 { get; set; }
+    public string MedicoAnestesiologo1 { get; set; }
+    public string cmpane1 { get; set; }
+    public int idMedicoAnestesiologo2 { get; set; }
+    public string MedicoAnestesiologo2 { get; set; }
+    public string cmpane2 { get; set; }
+    public int idInstrumentista { get; set; }
+    public string Instrumentista { get; set; }
+    public string cmpinst { get; set; }
+    public int idCirculante { get; set; }
+    public string Circulante { get; set; }
+    public string cmpcir { get; set; }
+    public string Edad { get; set; }
+    public string Hallazgos { get; set; }
+    public Datetime fechaCirugia { get; set; }
+    public string HoraFinReal { get; set; }
+    public string HoraInicioReal { get; set; }
+    public int IdDestinoAtencion { get; set; }
+    public string DestinoAtencion { get; set; }
+    public int IdRecetaAnatomiaPat { get; set; }
+    public int idReporteOperatorio { get; set; }
+    public string Incidentes { get; set; }
+    public string Complicaciones { get; set; }
+    public string Materiales { get; set; }
+    public string IndAnatomiaPat { get; set; }
+    public string DescripcionAnatomiaPat { get; set; }
+    public int NroReporte { get; set; }
+    public string Procedimiento { get; set; }
+    public int IdOrden { get; set; }
+    public int idTipoSolicitud { get; set; }
+    public Datetime fechafincirugia { get; set; }
+}
+/******************************************************************************************************/
+
+
+Sp para obtener diagnósticos(pre operatorio) .. el parámetro es : idsolicitudqx
+usp_select_SolicitudQxDiagnosticosSeleccionarTodosPorIdSolicitudQx_03092018
+ 
+Sp para obtener diagnósticos(post  operatorio) .. el parámetro es : idReporteOperatorio
+usp_select_ReporteOperatorioDiagnosticosSeleccionarTodosPorIdReporteOperatorio_03092018
+
+Cirugía programada: . el parámetro es : idsolicitudqx
+usp_select_SolicitudQxCPTSeleccionarTodosPorIdSolicitudQx_03092018
+
+Cirugpia realiazada:  el parámetro es : idorden
+FacturacionServicioDespachoFiltraPorIdOrden
+
+ 
+
+
+/******************************************************************************************************/
+DIAGNOSTICO PRE OPERATORIO
+/******************************************************************************************************/
+select 
+dia.CodigoCIE10,
+dia.Descripcion 
+from SolicitudQxDiagnosticos qx
+inner join Diagnosticos dia on qx.IdDiagnostico=dia.IdDiagnostico
+where idSolicitudQx=
+--@idSOlicitudQx
+37755
+
+
+/******************************************************************************************************/
+DIAGNOSTICO POST OPERATORIO
+/******************************************************************************************************/
+
+select 
+dia.CodigoCIE10,
+dia.Descripcion 
+from ReporteOperatorioDiagnosticos qx
+inner join Diagnosticos dia on qx.IdDiagnostico=dia.IdDiagnostico
+where idReporteOperatorio=--@idReporteOperatorio
+22264
+
+/******************************************************************************************************/
+CIRUGIA PROGRAMADA
+/******************************************************************************************************/
+select 
+cpt.* ,
+ser.Codigo,
+Nombre=left(ser.Nombre,50)  
+from SolicitudQxCPT cpt  
+inner join FactCatalogoServicios ser on cpt.IdProducto=ser.IdProducto  
+where idSolicitudQx=37755  
+
+/******************************************************************************************************/
+CIRUGIA REALIZADA
+/******************************************************************************************************/
+SELECT     
+dbo.FactCatalogoServicios.Codigo, 
+Nombre=Left(dbo.FactCatalogoServicios.Nombre,250)
+FROM         
+dbo.FacturacionServicioDespacho INNER JOIN  
+dbo.FactCatalogoServicios ON dbo.FacturacionServicioDespacho.IdProducto = dbo.FactCatalogoServicios.IdProducto  
+WHERE dbo.FacturacionServicioDespacho.idOrden=
+--@idOrden  
+3149679

@@ -1,0 +1,30 @@
+	select
+	a.IdAtencion, Codigo=d.CodigoCIE10, Descripcion=d.Descripcion
+	, tipo_diag=scd.Codigo
+	, rn=ROW_NUMBER() over (partition by rd.IdAtencion order by rd.IdAtencionDiagnostico desc)
+	from sigh.dbo.RecetaDiagnosticos rd (nolock)
+	inner join sigh.dbo.RecetaCabecera rc (nolock) on rd.idReceta=rc.idReceta
+	inner join sigh.dbo.RecetaAtencionVinculada rv (nolock) on rc.idReceta=rv.IdReceta
+	inner join sigh.dbo.Atenciones a (nolock) on rv.idCuentaAtencion=a.IdCuentaAtencion
+	left join sigh.dbo.Diagnosticos d (nolock) on rd.IdDiagnostico=d.IdDiagnostico
+	left join sigh.dbo.ClasificacionDiagnosticos cd (nolock) on rd.IdClasificacionDx=cd.IdClasificacionDx
+	left join sigh.dbo.SubclasificacionDiagnosticos scd (nolock) on rd.IdSubclasificacionDx=scd.IdSubclasificacionDx and rd.IdClasificacionDx=scd.IdClasificacionDx
+	where a.IdTipoServicio=@servicio and cd.IdClasificacionDx=@servicio
+	and a.idEstadoAtencion in (1,2) 
+	and convert(date,a.FechaIngreso)>=@FechaInicio
+	and convert(date,a.FechaIngreso)<=@FechaFin
+
+
+Atenciones
+AtencionesDiagnosticos
+Diagnosticos
+RecetaCabecera
+RecetaDiagnosticos
+RecetaAtencionVinculada
+
+SubclasificacionDiagnosticos
+ClasificacionDiagnosticos
+
+farmmovimientoventas
+FactOrdenServicioDiagnosticos
+factordenservicio

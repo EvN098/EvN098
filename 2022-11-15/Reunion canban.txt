@@ -1,0 +1,32 @@
+cada capacitacion o presentacion se requiere un documento (acta) por mas minimo que sea
+eder debe enviar correos de updates o inserts al ingeniero
+los 
+
+Se creó el programa para envio de reporte excel hospitalizados
+Se creó el programa para envio de excel de movimientos farmacia
+Se crearon los scripts en sql para agregar las nuevas opciones de respuestas rapidas
+
+trabajar con chicoma lo de hcweb (a su regreso): 
+1 metas: sacar aunque sea 1 firma digital y reporte operatorio
+
+4 cosas que el ingeniero pide para la creacion de una arquitectura bd
+-creacion del diccionario de base de datos
+-diagrama de base de datos
+-formulario y funciones
+-1 documento opcional que no se vió 
+
+crear top 10 reincidencia llamadas
+documentar, generar estructura, plantearlo como un proyecto :S
+basado en excel de eder 
+problema - solucion en el excel 
+identificar las variables 
+
+paleto -> distribcuion de frecuencias sobre las indicencias
+
+-> asignacion de horas y dias en el telefono a Erick :'v
+interdiario mañanas o tardes
+-> se acordó que si suena el telefono yo voy :v
+
+hacer el top ten parece prioritario 
+ponerle prioridad a aprender los tutoriales de galeno 
+

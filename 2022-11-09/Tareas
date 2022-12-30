@@ -1,0 +1,28 @@
+USP_TRAMA_SEGUIMIENTO_HOSPITALIZADOS_V1
+-Editar programa de hospitalizados, ver la forma de programar el envio automatico.
+-Editar el mensaje de envio
+-editar el usuario de envio, hay un usuario asignado para el envio de alertas
+-Quitar la hoja de leyendas
+
+
+Generar alerta a farmacia: 
+-Enviar dia primero
+-script enviado en correo por el Ing. Edder
+
+Explicación del código a las 12
+
+enseñar, "no explicar, sino enseñar" el proceso de elaboracion de excels, a Luis y a su vez solicitar que me enseñe y me pase los videos de los mantenimientos del galenos.
+
+"<table border="2px"> "              +               
+"   <tr>"                            +   
+"      <td>FechaProbableAlta</td>"   +                           
+"      <td>NudoCritico</td>"         +                       
+"  </tr>"                            +   
+"</table>"                           ;
+
+
+
+//se creo el store: USP_MovimientoMensual_Farmacia en el servidor de desarrollo 23
+
+//se creo el store: usp_farmaciaSeguimientoMensual en el servidor de produccion 16
+//el store se está usando actualmente para el programa de envio de alertas

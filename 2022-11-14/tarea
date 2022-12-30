@@ -1,0 +1,47 @@
+enviar correo diario con el excel 
+-> confirmar los cambios de las opciones rapidas
+
+cancelado lo de reporte operatorio
+
+
+concentimientos informados -> crear excel reconocer  // hacer primero el top 10 :v
+
+revisado lo de respuestas rapidas : faltan opciones verificar mediante un join las condiciones que faltan en el script de insercion -> guiarse de la data de la tabla de produccion 
+-> se hizo un query para poder seleccionar todos 
+
+--query para insertar los registros que faltan del idestado = 1 al estado = 5
+insert into ConclusionesSolicitudCita values (select 
+idEstadoSolicitudCitaOrigen,
+idEstadoSolicitudCitaDestino,
+Motivo,
+Evaluacion,
+idConclusion,
+Conclusion,
+idRecomendacion,
+Recomendacion,
+Observacion,
+indRecomendacion,
+'5',
+idFinanciador
+from ConclusionesSolicitudCita
+where idEstadoSolicitudCitaOrigen = 7
+and idEstado = 1)tab
+
+3017?
+/**/
+nroDocumento 
+nroOrigen 
+
+
+pedir los words a eder para armar el top 10 de motivos de llamadas 
+
+-> se corrieron los scripts para lo de respuestas rapidas.
+se cambio el estado de las antiguas opciones a idestado = 7
+y las opciones de mi script pasaron de 5 a 1 
+
+
+
+
+        -----         gestion estrategica
+    -------------     gestion tactica
+--------------------- gestion operativa

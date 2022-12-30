@@ -1,0 +1,9 @@
+Enviar diariamente el excel que se me encargó
+
+--eliminar sp creados para pruebas :
+    -dbo.USP_prueba_03112022
+    -dbo.dbo.USP_Consulta_cte_03112022
+
+
+
+    Create table HOSP-CARDIO ([idAprobadoQx] Text,[idSolicitudQx] Text,[FechaAprobado] Text,[idCuentaAtencion] Text,[idCuentaSolicitante] Text,[idPaciente] Text,[idSolicitudCierreDiaQx] Text,[idServicio] Text,[idServicioOpera] Text,[idSala] Text,[idCama] Text,[FechaProgramada] Text,[HoraInicioProgramada] Text,[HoraFinProgramada] Text,[idTurnoIntervencion] Text,[idTipoIntervencion] Text,[idTipoAnestesia] Text,[idMedicoPrincipal] Text,[idMedicoAyudante1] Text,[idMedicoAyudante2] Text,[idMedicoSolicitante] Text,[idMedicoAnestesiologo1] Text,[idMedicoAnestesiologo2] Text,[idInstrumentista] Text,[idCirculante] Text,[sg_Log_Cre_feh] Text,[sg_log_Cre_Usuario] Text,[sg_log_Cre_Equipo] Text,[sg_Log_Mod_feh] Text,[sg_log_Mod_Usuario] Text,[sg_log_Mod_Equipo] Text,[idEstado] Text,[idEspecialidadOpera] Text,[FechaCierre] Text)

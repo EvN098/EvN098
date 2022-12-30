@@ -1,0 +1,126 @@
+Consulta Externa:
+-Paciente
+-Citas y admision (Asignacion de citas)
+-Ordenes de Hospitalizacion 
+-Control de Anemia 
+-Registro de Triaje
+-Registro de atenciones (Atencions de Consulta externa)
+-Autoriza Adultos (Autorizacion Pacientes Adultos)
+-Orden Medica (Recetas)
+-Solicitud de Citas (Evaluacion de Solicitud Cita)
+-Referencias (Referencias de Consulta Externa)
+-Solicitud de Apoyo al Dx (Evaluacion de Solicitud Apoyo al Dx)
+-Contrarreferencias (Contrarreferencias de Consulta Externa)
+
+Emergencia:
+-Paciente
+-Admision de emergencia
+-Camas de observacion
+-Orden Medica
+-Referencias
+-Contrareferencias
+
+Hospitalizacion:
+-Paciente
+-Admision de Hospitalizacion
+-Camas de Hospitalizacion
+-Alojados 
+-Orden Medica
+-Referencias
+-Contrareferencias
+
+Telesalud:
+-Atencion de Telesalud
+-Admision Telesalud
+
+Programacion General:
+-Programacion
+-Turno
+-Profesionales de la salud
+-Aprobación de Programacion
+
+Interconsulta
+-Registro de Interconsulta
+-Solicitud Alertas Nefrologia (Gestion de solicitud de Interconsultas por Alertas Nefrologia)
+
+Achivo clinico:
+-Historia Clinica
+-Movimiento de Historias (Movimiento Historia Clinica)
+-Solicitud de Historias (Solicitud Historia Clinica)
+-Archiveros
+-Movimiento Formatos HC (Movimientos de Formatos de Historia Clinica)
+-Paciente
+-Modifica Datos Paciente
+
+Caja:
+-Gestion de caja
+-Cajas (Listado de Cajas)
+-Devoluciones -> Se retiro el modulo del sisgalenplus, posteriormente se estará agregando el modulo 'Nota de Credito' para las devoluciones.
+-Aprueba Nota de Credito
+-Aprueba Nota de Debito
+
+Farmacia:
+-Inventario
+-Medicamentos Aprobados (Mantenimiento de Actas del Comite Farmacologico y PNUME)
+-Solicitud Antimicrobiano (Gestion de Solicitud de Productos Antimicrobianos Restringidos)
+-Nota de Ingreso Almacen 
+-Reposición Farmacia
+-Nota de Salida Almacen
+-Venta
+-Intervenciones Sanitarias
+-Dependencias Externas
+-Despacho Donaciones
+-Farmacias
+-Validacion de Receta QF
+-Nota de Ingreso Farmacia
+-Nota de Salida Farmacia
+-Historico de Precios
+
+Nutricion
+-Solicitud de Soporte Nutricional
+-Gestion de Atenciones (Atenciones de Soporte Nutricional)
+-Ingreso Leche Materna
+-Salida Leche Materna
+
+Facturacion
+-Estado de cuenta
+-Consumo en el servicio
+-Laboratorio (facturacion laboratorio)
+-Imagenologia (facturaicon imagenologia)
+-Anatomia Patologica (facturacion anatomia patologica)
+-Farmacia (facturacion farmacia)
+-Sala de operaciones (facturacion sala de operaciones)
+-Reembolsos
+-Pacientes externos con cuenta (Particular)
+
+Fact-Config
+Tipos de cargo
+tipos de condicion de trabajo
+catalogo de bienes e insumos
+tipos de empleado
+tipo tarifa
+tipos de establecimientos
+centro de costos
+Catalogo de servicios
+Producto/Plan
+Catalogo de grupos y secciones (catalogo de sub grupos)
+Catalogo de partidas
+catalogo de sub secciones
+Fuente Financiamiento(IAFA)
+Catalogo de secciones
+Paquetes
+Catalogo de grupos
+Configuracion Resultados de Laboratorio
+Integracion con otros sistemas
+
+
+
+
+
+citas y admision: 
+-se selecciona dia
+-se escogen los doctores que estan de turno ese dia ( cada doc atiende una especialidad )
+-Se escoge un turno ese dia
+Se agrega con f2 al paciente
+
+

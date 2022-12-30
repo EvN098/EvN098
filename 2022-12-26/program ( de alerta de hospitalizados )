@@ -1,0 +1,184 @@
+using AlertaHospitalizacion;
+using Proyecto;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.OleDb;
+using System.Data.SqlClient;
+using System.IO;
+using System.Linq;
+
+namespace PruebaExcelEmail
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+            //Declaracion de variables 
+            string datetime = DateTime.Now.ToString("yyyyMMdd_HHmm");
+            string ExcelFileName = "HOSPITALIZADOS_" + datetime + ".XLSX";
+            string FolderPath = @"C:\Reportes_PacientesHospitalizados\";
+            string ExcelPath = Path.Combine(FolderPath, ExcelFileName);
+
+            string path = Path.GetFullPath("uploads");
+            string ExcelPath2 = Path.Combine(path, ExcelFileName);
+
+            //string StoredProcedureName = "dbo.USP_TRAMA_SEGUIMIENTO_HOSPITALIZADOS_V1";
+            string StoredProcedureName = "dbo.USP_TRAMA_SEGUIMIENTO_HOSPITALIZADOS_V4";
+            string connstring1 = ConfigurationManager.ConnectionStrings["cn"].ConnectionString;
+            string connstring2 = ConfigurationManager.ConnectionStrings["cn2"].ConnectionString;
+
+            string CuerpoMensaje = "Buen día," + "<br/>" + "Adjunto el Excel de Seguimiento de pacientes hospitalizados a la fecha: "+ DateTime.Now.ToString("F") +"."+"<br/>" +
+                                    "<br/>" + "Están disponibles las siguientes columnas del Excel para su registro: "+ "<br/>" + 
+                                    "<table border='2px'> " +
+                                    "   <tr>" +
+                                    "      <td>FechaProbableAlta</td>" +
+                                    "      <td>NudoCritico</td>" +
+                                    "  </tr>" +
+                                    "</table>"+"<br/>"+"<br/>";
+            
+            //string[] SheetsArray = {     "LEYENDA_HOJAS","HOSP_CARDIO","HOSP_CIRU_PED","HOSP_DONAC","HOSP_ONCOL","HOSP_ESP_PED","HOSP_ESP_QUI","HOSP_HEMA","HOSP_NEURO","HOSP_QUEM","HOSP_TPH","OBSERVACION","UCI_CARDIO","UCI_CARDV","UCI_NEONAT","UCI_NEURO","UCI_PEDIAT","UCI_QUEM","UCIN"     };
+
+            //Creacion de diccionario de nombres para columnas conocidas:
+            Dictionary<string , string> DicNombres = new Dictionary<string, string>();
+
+            DicNombres.Add("HOSPITALIZACION CARDIOVASCULAR", "HOSP_CARDIO");
+            DicNombres.Add("HOSPITALIZACION CIRUGIA PEDIATRICA", "HOSP_CIRU_PED");
+            DicNombres.Add("HOSPITALIZACION DE DONACIÓN Y TRASPLANTE", "HOSP_DONAC");
+            DicNombres.Add("HOSPITALIZACION DE ONCOLOGIA PEDIATRICA", "HOSP_ONCOL");
+            DicNombres.Add("HOSPITALIZACION ESPEC PEDIATRICAS", "HOSP_ESP_PED");
+            DicNombres.Add("HOSPITALIZACION ESPEC QUIRURGICAS (OESTE)", "HOSP_ESP_QUI");
+            DicNombres.Add("HOSPITALIZACION HEMATOLOGIA", "HOSP_HEMA");
+            DicNombres.Add("HOSPITALIZACION NEUROCIRUGIA", "HOSP_NEURO");
+            DicNombres.Add("HOSPITALIZACION QUEMADO", "HOSP_QUEM");
+            DicNombres.Add("HOSPITALIZACION TRASPLANTES DE PROGENITORES HEMATO", "HOSP_TPH");
+            DicNombres.Add("OBSERVACION", "OBSERVACION");
+            DicNombres.Add("UCI CARDIOLOGIA", "UCI_CARDIO");
+            DicNombres.Add("UCI CARDIOVASCULAR", "UCI_CARDV");
+            DicNombres.Add("UCI NEONATOLOGIA", "UCI_NEONAT");
+            DicNombres.Add("UCI NEUROCIRUGIA", "UCI_NEURO");
+            DicNombres.Add("UCI PEDIATRICA", "UCI_PEDIAT");
+            DicNombres.Add("UCI QUEMADOS", "UCI_QUEM");
+            DicNombres.Add("UNIDAD DE CUIDADOS INTERMEDIOS NEONATAL", "UCIN");
+
+
+            //Obteniendo emails del app.config
+            string fromEmail = ConfigurationManager.AppSettings.Get("email_from").ToString();
+            string email_cc1 = ConfigurationManager.AppSettings.Get("email_cc1").ToString();
+            string email_cc2 = ConfigurationManager.AppSettings.Get("email_cc2").ToString();
+            string email_cc3 = ConfigurationManager.AppSettings.Get("email_cc3").ToString();
+            string email_cc4 = ConfigurationManager.AppSettings.Get("email_cc4").ToString();
+
+            //creando array de destinatarios y destinatarios con copia
+            /*
+            string[] DestinosF = ConfigurationManager.AppSettings["destinatarios"].Split(',').Select(s => s.Trim()).ToArray();
+            string[] CopiaA = {   email_cc1
+                                 , email_cc2
+                                 //, email_cc4
+                                //, email_cc3
+                              };
+            */
+            try
+            {                
+                // Si no existe el directorio, crearlo
+                if (!Directory.Exists(FolderPath))
+                {
+                    Directory.CreateDirectory(FolderPath);
+                }
+                
+                //Eliminar si existe un excel del mismo nombre
+                File.Delete(ExcelPath);
+
+                //Conexion a la BD
+                SqlConnection myADONETConnection = new SqlConnection(connstring1);
+                myADONETConnection.Open();
+                //Ejecutar sp y cargar data en el dataset
+                string queryString = "EXEC " + StoredProcedureName;
+                SqlDataAdapter adapter = new SqlDataAdapter(queryString, myADONETConnection);
+                DataSet ds = new DataSet();
+                adapter.Fill(ds);
+               
+                myADONETConnection.Close();
+                
+                /***************************************************************************************************************************/
+                string StoredProcedureName2 = "USP_LISTA_DESTINATARIOS";
+                //string queryString2 = "EXEC " + StoredProcedureName2 + " @IdAlerta = 1";
+                string queryString2 = "select * from TabAlertaMensajeriaDestinatarios where IdAlerta = (select idalerta from tabAlertaMensajeria where idestado = 1 and idalerta = 3) and IdEstado = 1";
+                //string queryString2 = "select tipodestinatario, correo from TabAlertaMensajeriaDestinatarios where IdAlerta = (select idalerta from tabAlertaMensajeria where idestado = 1 and idalerta = 3) and IdEstado = 1";
+                //string queryString2 = "select d.tipodestinatario, d.correo from TabAlertaMensajeriaDestinatarios d inner join TabAlertaMensajeria a on a.idalerta = d.idalerta where a.IdAlerta = 3 and a.IdEstado = 1 and d.IdEstado = 1 ";
+
+                /***************************************************************************************************************************/
+                
+                List<string> ListaDestinatarioTo = new List<string>();
+                List<string> ListaDestinatarioCc = new List<string>();
+
+                //using (SqlConnection connection = new SqlConnection(connstring1))
+                using (SqlConnection connection = new SqlConnection(connstring2))
+                {
+                    //SqlDataAdapter adapter2 = new SqlDataAdapter(queryString2, myADONETConnection);
+                    SqlDataAdapter adapter2 = new SqlDataAdapter(queryString2, connection);
+                    DataSet ds2 = new DataSet();
+                    adapter2.Fill(ds2);
+
+                    var myData = ds2.Tables[0].AsEnumerable().Select(r => new AlertaDestinatario
+                    {
+                        IdAlertaDestinatario = r.Field<int>("IdAlertaDestinatario"),
+                        IdAlerta = r.Field<int>("IdAlerta"),
+                        IdEmpleado = r.Field<int?>("IdEmpleado"),
+                        TipoDestinatario = r.Field<string>("TipoDestinatario"),
+                        Correo = r.Field<string>("Correo"),
+                        Telefono = r.Field<string>("Telefono"),
+                        IdEstado = r.Field<int>("IdEstado")
+                        
+                    });
+
+                    foreach ( AlertaDestinatario item in myData)
+                    {
+
+                        if ( (item.TipoDestinatario).ToUpper().Trim().Equals("TO"))
+                        {
+                            ListaDestinatarioTo.Add(item.Correo);
+
+                        }else if ((item.TipoDestinatario).ToUpper().Trim().Equals("CC"))
+                        {
+                            ListaDestinatarioCc.Add(item.Correo);
+                        }
+                    }
+                    
+                }
+
+  
+                /*************************************************************************************************************************************/
+
+                //Exportando dataset para crear el excel 
+                Helper help = new Helper();
+                //help.ExportDataSet(ds, ExcelPath, SheetsArray, DicNombres);
+                //help.ExportDataSet(ds, ExcelPath, DicNombres);
+                help.ExportDataSet(ds, ExcelPath2, DicNombres);
+
+                //Instanciando clase email para llamar al metodo de envio
+                Email clemail = new Email();
+                //clemail.enviarEmail(CuerpoMensaje, FolderPath, ExcelFileName, DestinosF);
+
+                //clemail.enviarEmail(CuerpoMensaje, FolderPath, ExcelFileName, DestinosF, CopiaA);
+                //clemail.enviarEmail(CuerpoMensaje, FolderPath, ExcelFileName, ListaDestinatarioTo, ListaDestinatarioCc);
+                clemail.enviarEmail(CuerpoMensaje, path, ExcelFileName, ListaDestinatarioTo, ListaDestinatarioCc);
+
+                //Elimina el excel creado
+                File.Delete(ExcelPath2);
+            }
+
+            catch (Exception exception)
+            {
+                //Si se genera un error en la ejecución crear un archivo de texto plano con el log
+                //using (StreamWriter sw = File.CreateText(FolderPath+"ErrorReporteHospitalizados_" + datetime + ".log"))
+                using (StreamWriter sw = File.CreateText(path + "\\ErrorReporteHospitalizados_" + datetime + ".log"))
+                {
+                    sw.WriteLine(exception.ToString());
+                }
+            }
+        }
+    }
+}

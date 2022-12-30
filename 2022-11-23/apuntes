@@ -1,0 +1,37 @@
+2022-11-23
+
+Se envió un correo a los miembros del grupo adjuntando una foto de la pizarra ( debido a que ésta se iba a borrar)
+mencionando las siguientes tablas:
+
+atencionesDiagnosticos
+diagnosticosRecetas
+farmmovimientosVentasDiagnosticos
+FactOrdenServicioDiagnosticos
+InterconsultasDiagnosticos
+ReporteOperatorioDiagnosticos
+DiagnosticosAnatomiaPatologica
+FarmmovimientoPreventaDiagnosticos
+AntimicrobianoDiagnostico
+OrdenHospDiagnosticos
+ReferenciasDiagnosticos
+SolicitudQxDiagnosticos
+AtencionesEvolucionDiag
+AtencionesNotaIngresoDiagnosticos
+CartaGarantiaDiagnosticos
+
+se hizo:
+    -> Recortar un video
+    -> creación de carpeta compartida
+    -> avance del reporte de seguimiento hospitalizados según indicó el ingeniero.
+    -> avance de los casos de llamadas 
+    
+
+pendientes:
+    -> rellenar el kanban de desarrollo 
+    -> rellenar el excel de incidencias de llamadas de usuarios
+    -> realizar la investigacion de whatsapp para vb 6.0
+    -> realizar el query de consulta que me envío el ingeniero -> pedir apoyo a luis 
+    -> realizar el reporte de consumo laboratorio, cito mensaje:
+        "Comentarle que la semana antepasada nos reunimos con el Ing Grados,  a fin de retomar pendientes con Patología Clínica, dentro de los cuales se priorizaron:
+            - Reporte de producción de pruebas tercerizadas (adjunto encabezado) frecuencia de envío quincenal.
+            - Pruebas para plantilla de resultados Grupo 1 (Inmunología)"

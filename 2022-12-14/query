@@ -1,0 +1,19 @@
+SELECT * FROM information_schema.tables 
+where TABLE_NAME 
+like '%tab%' 
+or TABLE_NAME 
+like '%mov%' 
+order by TABLE_NAME desc
+
+
+--Listar Columnas de una tabla 
+select COLUMN_NAME
+from INFORMATION_SCHEMA.COLUMNS
+where TABLE_SCHEMA = 'dbo'
+and TABLE_NAME = 'movArchivosDigitalCab'
+order by ORDINAL_POSITION
+
+exec sp_help tabTipoProcesoDigital
+
+select * from tabFormatoDigital
+

@@ -1,0 +1,1034 @@
+//using iTextSharp.text;
+//using System;
+//using System.Collections.Generic;
+//using System.Drawing;
+//using System.Linq;
+//using System.Web;
+//using System.Web.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using iTextSharp.text;
+using System.IO;
+using iTextSharp.text.pdf;
+using System.Data.SqlClient;
+using System.Web.UI.WebControls.WebParts;
+using System.Runtime.Remoting.Messaging;
+using System.Web.UI.WebControls;
+using WebApplication1.Models;
+using WebApplication1.Entities;
+
+namespace WebApplication1.Controllers
+{
+    public class HomeController : Controller
+    {
+        public ActionResult Index()
+        {
+            
+
+            GenerarPDF();
+            return View();
+        }
+
+        public string FechaHoraFormateada()
+        {
+            DateTime fe = DateTime.Now;
+            int fedia = Convert.ToInt32(fe.Day);
+            string fedia2 = string.Format("{0:00}", fedia);
+            int femes = Convert.ToInt32(fe.Month);
+            string femes2 = string.Format("{0:00}", femes);
+            string feano = Convert.ToString(fe.Year);
+
+            return fedia2 + femes2 + feano + DateTime.Now.ToString("hhmmss");
+        }
+
+        //Da formato dd/mm/yyyy a un datetime 
+        public string FechaHoraFormateadaGeneral(DateTime fe)
+        {
+            //DateTime fe = DateTime.Now;
+            int fedia = Convert.ToInt32(fe.Day);
+            string fedia2 = string.Format("{0:00}", fedia);
+            int femes = Convert.ToInt32(fe.Month);
+            string femes2 = string.Format("{0:00}", femes);
+            string feano = Convert.ToString(fe.Year);
+
+            return fedia2 +"/"+ femes2 + "/"+ feano ;
+
+        }
+        /******************************************************************************************/
+        /******************************************************************************************/
+        //Corregir resta de horas
+        public string RestarHoras(string horaInicio, string horaFin) 
+        { 
+
+
+            
+            int v1 = (Int32.Parse(horaInicio.Split(':')[0]) * 60) + Int32.Parse(horaInicio.Split(':')[1]);
+            int v2 = (Int32.Parse(horaFin.Split(':')[0]) * 60) + Int32.Parse(horaFin.Split(':')[1]);
+            int dif = Math.Abs(v2 - v1);
+            int hours = dif / 60;
+            int minutes = dif - (hours * 60);
+            String h3 = (hours + "").Length == 2 ? hours + "" : "0" + hours;
+            h3 += ":" + ((minutes + "").Length == 2 ? minutes + "" : "0" + minutes);
+            return h3;
+        }
+
+        /******************************************************************************************/
+        /******************************************************************************************/
+        public bool GenerarPDF()
+        {
+            
+            ReporteOperatorio oReporteOperatorio = new ReporteOperatorio();
+
+            ReporteOperatorioModel IreporteOperatorioModel = new ReporteOperatorioModel();
+
+            oReporteOperatorio = IreporteOperatorioModel.SeleccionarPorId(22264);
+
+            string Datehhmm = DateTime.Now.ToString("dd-MM-yyyy hh:mm");
+            string fechaactual = FechaHoraFormateada();
+            bool RptaEstado = false;
+
+            //Colores            
+            var FontColour = new BaseColor(35, 31, 32);
+            var fontblanco = new BaseColor(255, 255, 255);
+
+            //Fuentes
+            var MyFont = FontFactory.GetFont(FontFactory.HELVETICA, 7, Font.NORMAL, FontColour);
+            var MyFont10 = FontFactory.GetFont(FontFactory.HELVETICA, 9, Font.NORMAL);
+            var MyFont11 = FontFactory.GetFont(FontFactory.HELVETICA, 11, Font.NORMAL);
+            var MyFontNegrita = FontFactory.GetFont(FontFactory.HELVETICA, 9, Font.BOLD);
+            var MyFontSumilla = FontFactory.GetFont(FontFactory.HELVETICA, 6, Font.NORMAL);
+
+            try
+            {
+                // Primero declaramos el documento
+                //Document doc = new Document(PageSize.A4, 30f, 20f, 10f, 0f);
+                Document doc = new Document(PageSize.A4, 10f, 10f, 10f, 0f);
+
+                string _dir = System.Web.HttpContext.Current.Server.MapPath("~/Documento/");
+                //Directory.Delete(_dir);
+                if (!Directory.Exists(_dir))
+                    Directory.CreateDirectory(_dir);
+
+                FileStream _stream = new FileStream(string.Format("{0}/pdf{1}.pdf", _dir, fechaactual), FileMode.Create);
+                PdfWriter writer = PdfWriter.GetInstance(doc, _stream);
+
+                doc.AddTitle("ReporteOperatorio");
+                doc.AddCreator("INSNSB");
+                doc.Open();
+
+                int desface = -40;
+                doc.Add(Chunk.NEWLINE);
+
+
+                //Escribimos el encabezamiento en el documento
+                //Image img = Image.GetInstance(Server.MapPath("/Images/informe/InterconsultaEncabezado.jpg"));
+                //img.SetAbsolutePosition(10, 790);
+                //img.ScaleAbsolute(560, 40);
+                //img.SpacingAfter = 0;
+                //doc.Add(img);
+
+                //doc.Add(new Paragraph("\n\n\n"));
+
+                var para1 = new Paragraph("REPORTE OPERATORIO N° " + (oReporteOperatorio.idReporteOperatorio).ToString()); para1.Alignment = 1; para1.Font.Size = 11;
+                doc.Add(para1);
+                //var para2 = new Paragraph("REPORTE DE RESULTADO");
+                //para2.Alignment = 1; para2.Font.Size = 9;
+                //doc.Add(para2);
+
+                //var para3 = new Paragraph("DETERMINACIÓN DEL GRUPO SANGUÍNEO");
+                //para3.Alignment = 1; para2.Font.Size = 11;
+                //doc.Add(para3);
+
+
+                PdfPCell cell = new PdfPCell(new Phrase(""));
+
+
+                /******************************************************************************************/
+                //PdfPCell cell = new PdfPCell(new Phrase(""));
+                float[] columnWidths = { 100, 10, 200, 50, 100, 50, 100 };
+                PdfPTable Table1 = new PdfPTable(columnWidths);
+
+                //PdfPTable Table1 = new PdfPTable(6);
+                Table1.WidthPercentage = 90;
+                Table1.SpacingBefore = 10;
+                Table1.DefaultCell.Border = 0;
+
+                cell = new PdfPCell(new Phrase("Primer Cirujano", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table1.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(":", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table1.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(oReporteOperatorio.MedicoPrincipal, MyFont));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table1.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("CMP: ", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table1.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(oReporteOperatorio.cmpmep, MyFont));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table1.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("RNE: ", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table1.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(oReporteOperatorio.rnemep, MyFont));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table1.AddCell(cell);
+
+                doc.Add(Table1);
+
+                /************************************************************************************************************************/
+
+                //PdfPTable Table2 = new PdfPTable(5);
+                float[] columnWidths2 = { 53, 6, 120, 50, 100 };
+                //float[] columnWidths = { 100, 10, 200, 50, 100, 50, 100 };
+                PdfPTable Table2 = new PdfPTable(columnWidths2);
+                Table2.WidthPercentage = 90;
+                Table2.SpacingBefore = 10;
+                Table2.DefaultCell.Border = 0;
+
+                cell = new PdfPCell(new Phrase("1er Ayudante", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table2.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(":", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table2.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase((oReporteOperatorio.MedicoAyudante1 == null ? "---" : oReporteOperatorio.MedicoAyudante1), MyFont));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table2.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("2do Ayudante: ", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table2.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase((oReporteOperatorio.MedicoAyudante2 == null ? "---" : oReporteOperatorio.MedicoAyudante2), MyFont));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table2.AddCell(cell);
+
+                /**************/
+
+                cell = new PdfPCell(new Phrase("Instrumentista", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table2.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(":", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table2.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase((oReporteOperatorio.Instrumentista == null ? "---" : oReporteOperatorio.Instrumentista), MyFont));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table2.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("Circulante: ", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table2.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase((oReporteOperatorio.Circulante == null ? "---" : oReporteOperatorio.Circulante), MyFont));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table2.AddCell(cell);
+
+                /**************/
+
+                cell = new PdfPCell(new Phrase("Anestesiólogo", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table2.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(":", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table2.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase((oReporteOperatorio.MedicoAnestesiologo1 == null ? "---" : oReporteOperatorio.MedicoAnestesiologo1), MyFont));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table2.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("Tipo Anestesia: ", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table2.AddCell(cell);
+
+                //cell = new PdfPCell(new Phrase((oReporteOperatorio.TipoAnestesia == null ? "---" : oReporteOperatorio.TipoAnestesia), MyFont));
+                cell = new PdfPCell(new Phrase(oReporteOperatorio.TipoAnestesia, MyFont));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table2.AddCell(cell);
+                doc.Add(Table2);
+
+                /************************************************************************************************************************/
+                float[] columnWidths3 = { 58, 6, 300 };
+                PdfPTable Table3 = new PdfPTable(columnWidths3);
+
+                //PdfPTable Table3 = new PdfPTable(3);
+                Table3.WidthPercentage = 90;
+                Table3.SpacingBefore = 10;
+                Table3.DefaultCell.Border = 0;
+
+
+
+                cell = new PdfPCell(new Phrase("Cirujía Realizada", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table3.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(":", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table3.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(" ", MyFont));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table3.AddCell(cell);
+                doc.Add(Table3);
+
+
+                /************************************************************************************************************************/
+                //PdfPTable Table4 = new PdfPTable(11);
+                float[] columnWidths4 = { 95, 7, 50, 70, 40, 60, 50, 60, 30, 80, 50 };
+                PdfPTable Table4 = new PdfPTable(columnWidths4);
+                Table4.WidthPercentage = 90;
+                Table4.SpacingBefore = 10;
+                Table4.DefaultCell.Border = 0;
+
+                cell = new PdfPCell(new Phrase("Fecha Cirujía", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table4.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(":", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table4.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(FechaHoraFormateadaGeneral(oReporteOperatorio.fechaCirugia), MyFont));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table4.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("Hora Inicio:", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table4.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(oReporteOperatorio.HoraInicioReal, MyFont));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table4.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("Fecha Fin:", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table4.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(FechaHoraFormateadaGeneral(oReporteOperatorio.fechafincirugia), MyFont));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table4.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("Hora Fin:", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table4.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(oReporteOperatorio.HoraFinReal, MyFont));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table4.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("Tiempo Cirujía:", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table4.AddCell(cell);
+
+                /****
+                string fechaconHora = (oReporteOperatorio.fechaCirugia).ToString() + ' ' + oReporteOperatorio.HoraInicioReal;
+                string fechaconHora2 = (oReporteOperatorio.fechaCirugia).ToString("dd/mm/yyyy") + ' ' + oReporteOperatorio.HoraInicioReal;
+                DateTime fechaConHora1 = fechaconHora2;
+                ****/
+
+                //cell = new PdfPCell(new Phrase(RestarHoras(oReporteOperatorio.HoraFinReal, oReporteOperatorio.HoraInicioReal), MyFont));
+                cell = new PdfPCell(new Phrase(" ", MyFont));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table4.AddCell(cell);
+
+                doc.Add(Table4);
+                //doc.Close();
+
+                /******************************************************************************************/
+
+                //PdfPTable Table5 = new PdfPTable(6);
+                float[] columnWidths5 = { 35, 3, 3, 10, 5, 50, 10, 5, 100 };
+                PdfPTable Table5 = new PdfPTable(columnWidths5);
+                Table5.WidthPercentage = 90;
+                Table5.SpacingBefore = 10;
+                Table5.DefaultCell.Border = 0;
+
+                cell = new PdfPCell(new Phrase("Tipo Cirujía", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table5.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(":", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table5.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(" ", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table5.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase((oReporteOperatorio.idTipoIntervencion == 2 ? "X" : " "), MyFont));
+                //cell = new PdfPCell(new Phrase(" ", MyFont));
+                cell.HorizontalAlignment = 1;
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table5.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(" ", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table5.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("EMERGENCIA", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table5.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(" ", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table5.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase((oReporteOperatorio.idTipoIntervencion == 1 ? "X" : " "), MyFont));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                cell.HorizontalAlignment = 1;
+                Table5.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("PROGRAMADA", MyFontNegrita));
+                //cell.BorderColor = fontblanco;
+                cell.BorderColor = FontColour;
+                Table5.AddCell(cell);
+
+                doc.Add(Table5);
+                /******************************************************************************************/
+
+                //PdfPTable Table6 = new PdfPTable(2);
+                float[] columnWidths6 = { 300, 700 };
+                PdfPTable Table6 = new PdfPTable(columnWidths6);
+                Table6.WidthPercentage = 90;
+                Table6.SpacingBefore = 10;
+                Table6.DefaultCell.Border = 0;
+
+                /** columna anidada
+                PdfPTable nested = new PdfPTable(1);
+                nested.WidthPercentage = 100;
+                //nested.SpacingBefore = 10;
+                nested.DefaultCell.Border = 0;
+
+                cell = new PdfPCell(new Phrase("ORDEN", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                nested.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("DESTINO PACIENTE", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                nested.AddCell(cell);
+
+                PdfPCell nesthousing = new PdfPCell(nested);
+                nesthousing.Padding = 0f;
+
+                Table6.AddCell(nesthousing);
+                **/
+
+                /** columna rowspan ( 
+                 
+                 **/
+                cell = new PdfPCell(new Phrase("ORDEN", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                Table6.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("1.- Diagnóstico Pre Operatorio", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                Table6.AddCell(cell);
+                /***/
+                cell = new PdfPCell(new Phrase("1.- Diagnóstico Pre Operatorio", MyFont));
+                //cell.BorderColor = fontblanco;
+                cell.Border = PdfPCell.LEFT_BORDER;
+                Table6.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(" ", MyFont));
+                cell.BorderColor = FontColour;
+                //cell.BorderColor = fontblanco;
+                Table6.AddCell(cell);
+                /***/
+                cell = new PdfPCell(new Phrase("2.- Diagnóstico Post Operatorio", MyFont));
+                //cell.BorderColor = fontblanco;
+                cell.Border = PdfPCell.LEFT_BORDER;
+
+                Table6.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("2.- Diagnóstico Post Operatorio", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                //cell.BorderColor = fontblanco;
+                Table6.AddCell(cell);
+                /***/
+                cell = new PdfPCell(new Phrase("3.- Cirujía Programada", MyFont));
+                //cell.BorderColor = fontblanco;
+                cell.Border = PdfPCell.LEFT_BORDER;
+                Table6.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(" ", MyFont));
+                cell.BorderColor = FontColour;
+                //cell.BorderColor = fontblanco;
+                Table6.AddCell(cell);
+                /***/
+                cell = new PdfPCell(new Phrase("4.- Cirujía Realizada", MyFont));
+                //cell.BorderColor = fontblanco;
+                cell.Border = PdfPCell.LEFT_BORDER;
+                Table6.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("3.- Cirujía Programada", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                //cell.BorderColor = fontblanco;
+                Table6.AddCell(cell);
+                /***/
+                cell = new PdfPCell(new Phrase("5.- Procedimiento", MyFont));
+                //cell.BorderColor = fontblanco;
+                cell.Border = PdfPCell.LEFT_BORDER;
+                Table6.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(" ", MyFont));
+                cell.BorderColor = FontColour;
+                //cell.BorderColor = fontblanco;
+                Table6.AddCell(cell);
+                /***/
+                cell = new PdfPCell(new Phrase("6.- Hallazgos", MyFont));
+                //cell.BorderColor = fontblanco;
+                cell.Border = PdfPCell.LEFT_BORDER;
+                Table6.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("4.- Cirujía Realizada", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                //cell.BorderColor = fontblanco;
+                Table6.AddCell(cell);
+                /***/
+                cell = new PdfPCell(new Phrase("7.- Incidentes", MyFont));
+                //cell.BorderColor = fontblanco;
+                cell.Border = PdfPCell.LEFT_BORDER;
+                Table6.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(" ", MyFont));
+                cell.BorderColor = FontColour;
+                //cell.BorderColor = fontblanco;
+                Table6.AddCell(cell);
+                /***/
+                cell = new PdfPCell(new Phrase("8.- Anatomía Patológica/Biopsia", MyFont));
+                //cell.BorderColor = fontblanco;
+                cell.Border = PdfPCell.LEFT_BORDER;
+                Table6.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("5.- Procedimiento", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                //cell.BorderColor = fontblanco;
+                Table6.AddCell(cell);
+
+                /***/
+                cell = new PdfPCell(new Phrase("9.- Firma", MyFont));
+                //cell.BorderColor = fontblanco;
+                cell.Border = PdfPCell.LEFT_BORDER;
+                Table6.AddCell(cell);
+
+                
+                cell = new PdfPCell(new Phrase(oReporteOperatorio.Procedimiento == null ? "NINGUNO" : oReporteOperatorio.Procedimiento, MyFont));
+                cell.BorderColor = FontColour;
+                //cell.BorderColor = fontblanco;
+                Table6.AddCell(cell);
+                /***/
+                doc.Add(Table6);
+
+                /******************************************************************************************/
+
+                float[] columnWidths7 = { 300, 700 };
+                PdfPTable Table7 = new PdfPTable(columnWidths7);
+                Table7.WidthPercentage = 90;
+                Table7.SpacingBefore = 0;
+                Table7.DefaultCell.Border = 0;
+
+                /***/
+                cell = new PdfPCell(new Phrase("DESTINO PACIENTE:", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                //cell.BorderColor = fontblanco;
+                Table7.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("6.- Hallazgos", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                //cell.BorderColor = fontblanco;
+                Table7.AddCell(cell);
+
+                /***/
+                cell = new PdfPCell(new Phrase(" ", MyFont));
+                cell.Border = PdfPCell.LEFT_BORDER;
+                //cell.BorderColor = fontblanco;
+                Table7.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(oReporteOperatorio.Hallazgos, MyFont));
+                cell.Border = PdfPCell.LEFT_BORDER;
+                //cell.BorderColor = FontColour;
+                //cell.BorderColor = fontblanco;
+                Table7.AddCell(cell);
+                /***/
+
+
+                /** columna anidada **/
+
+                float[] columnWidths8 = { 10, 2, 40 };
+                PdfPTable nested = new PdfPTable(columnWidths8);
+                nested.WidthPercentage = 100;
+                //nested.SpacingBefore = 10;
+                nested.DefaultCell.Border = 0;
+
+
+                cell = new PdfPCell(new Phrase(" ", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                nested.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(" ", MyFontNegrita));
+                //cell.BorderColor = FontColour;
+                cell.Border = PdfPCell.LEFT_BORDER;
+                //cell.BorderColor = fontblanco;
+                nested.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("RECUPERACION", MyFontNegrita));
+                //cell.BorderColor = FontColour;
+                cell.BorderColor = fontblanco;
+                nested.AddCell(cell);
+
+                PdfPCell nesthousing = new PdfPCell(nested);
+                nesthousing.Padding = 0f;
+
+                Table7.AddCell(nesthousing);
+                /** fin columna anidada **/
+
+                cell = new PdfPCell(new Phrase("7.- Incidentes", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                //cell.BorderColor = fontblanco;
+                Table7.AddCell(cell);
+
+                /***/
+                cell = new PdfPCell(new Phrase(" ", MyFont));
+                cell.Border = PdfPCell.LEFT_BORDER;
+                //cell.BorderColor = FontColour;
+                //cell.BorderColor = fontblanco;
+                Table7.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(oReporteOperatorio.Incidentes, MyFont));
+                cell.BorderColor = FontColour;
+                //cell.BorderColor = fontblanco;
+                Table7.AddCell(cell);
+                /***/
+                cell = new PdfPCell(new Phrase(" ", MyFont));
+                cell.Border = PdfPCell.LEFT_BORDER;
+                //cell.BorderColor = FontColour;
+                Table7.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("8.- Complicaciones", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                //cell.BorderColor = fontblanco;
+                Table7.AddCell(cell);
+                /***/
+                cell = new PdfPCell(new Phrase(" ", MyFont));
+                cell.Border = PdfPCell.LEFT_BORDER;
+                //cell.BorderColor = FontColour;
+                Table7.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(oReporteOperatorio.Complicaciones, MyFont));
+                cell.BorderColor = FontColour;
+                //cell.BorderColor = fontblanco;
+                Table7.AddCell(cell);
+                /***/
+                cell = new PdfPCell(new Phrase(" ", MyFont));
+                cell.Border = PdfPCell.LEFT_BORDER;
+                //cell.BorderColor = FontColour;
+                Table7.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("9.- Materiales Usados QX", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                //cell.BorderColor = fontblanco;
+                Table7.AddCell(cell);
+
+                /***/
+                cell = new PdfPCell(new Phrase(" ", MyFont));
+                cell.Border = PdfPCell.LEFT_BORDER;
+                //cell.BorderColor = FontColour;
+                Table7.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(oReporteOperatorio.Materiales, MyFont));
+                cell.BorderColor = FontColour;
+                //cell.BorderColor = fontblanco;
+                Table7.AddCell(cell);
+                /***/
+
+                /***/
+                cell = new PdfPCell(new Phrase(" ", MyFont));
+                cell.Border = PdfPCell.LEFT_BORDER;
+                //cell.BorderColor = FontColour;
+                Table7.AddCell(cell);
+
+                /** columna anidada 10 - 11 **/
+
+                float[] columnWidths9 = { 50, 50 };
+                PdfPTable nested2 = new PdfPTable(columnWidths9);
+                nested2.WidthPercentage = 100;
+                //nested.SpacingBefore = 10;
+                nested2.DefaultCell.Border = 0;
+
+                cell = new PdfPCell(new Phrase("10.- Anatomía Patológica", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                nested2.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("11.-Firma y Sello:", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                nested2.AddCell(cell);
+
+
+                //oReporteOperatorio.MedicoAyudante1 == null ? "---" : oReporteOperatorio.MedicoAyudante1
+                cell = new PdfPCell(new Phrase(oReporteOperatorio.IndAnatomiaPat == 0 ? "NO": oReporteOperatorio.DescripcionAnatomiaPat , MyFontNegrita));
+                cell.BorderColor = FontColour;
+                nested2.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(" ", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                nested2.AddCell(cell);
+
+                PdfPCell nesthousing2 = new PdfPCell(nested2);
+                nesthousing2.Padding = 0f;
+
+                Table7.AddCell(nesthousing2);
+                /** fin columna anidada **/
+
+
+                /***/
+                cell = new PdfPCell(new Phrase(" ", MyFont));
+                cell.Border = PdfPCell.LEFT_BORDER;
+                //cell.BorderColor = FontColour;
+                Table7.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(" ", MyFont));
+                cell.BorderColor = FontColour;
+                //cell.BorderColor = fontblanco;
+                Table7.AddCell(cell);
+                /***/
+
+                /***/
+                cell = new PdfPCell(new Phrase(" ", MyFont));
+                cell.Border = PdfPCell.LEFT_BORDER;
+                //cell.BorderColor = FontColour;
+                Table7.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(" ", MyFont));
+                cell.BorderColor = FontColour;
+                //cell.BorderColor = fontblanco;
+                Table7.AddCell(cell);
+                /***/
+
+                doc.Add(Table7);
+
+
+
+                float[] columnWidths10 = { 250, 250, 250, 250 };
+                //PdfPTable Table8 = new PdfPTable(columnWidths10);
+                PdfPTable Table8 = new PdfPTable(4);
+                Table6.WidthPercentage = 90;
+                Table6.SpacingBefore = 10;
+                Table6.DefaultCell.Border = 0;
+
+                /****/
+                cell = new PdfPCell(new Phrase("APELLIDO PATERNO", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                cell.HorizontalAlignment = 1;
+                Table8.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("APELLIDO MATERNO", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                cell.HorizontalAlignment = 1;
+                Table8.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("NOMBRES", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                cell.HorizontalAlignment = 1;
+                Table8.AddCell(cell);
+
+
+                /** columna anidada **/
+                PdfPTable nested2 = new PdfPTable(3);
+                nested2.WidthPercentage = 100;
+                //nested.SpacingBefore = 10;
+                nested2.DefaultCell.Border = 0;
+
+                cell = new PdfPCell(new Phrase("EDAD", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                nested2.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("SEXO", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                nested2.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("PESO", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                nested2.AddCell(cell);
+
+                PdfPCell nesthousing2 = new PdfPCell(nested2);
+                nesthousing2.Padding = 0f;
+
+                Table8.AddCell(nesthousing2);
+                /** fin tabla anidada **/
+
+                /*
+                cell = new PdfPCell(new Phrase("EDAD    SEXO    PESO", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                cell.HorizontalAlignment = 1;
+                Table8.AddCell(cell);
+                */
+
+                /****/
+                cell = new PdfPCell(new Phrase(oReporteOperatorio.ApellidoPaterno, MyFontNegrita));
+                cell.BorderColor = FontColour;
+                cell.HorizontalAlignment = 1;
+                Table8.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(oReporteOperatorio.ApellidoMaterno, MyFontNegrita));
+                cell.BorderColor = FontColour;
+                cell.HorizontalAlignment = 1;
+                Table8.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase((oReporteOperatorio.PrimerNombre + ' ' + oReporteOperatorio.SegundoNombre == null? "": oReporteOperatorio.SegundoNombre).Trim(), MyFontNegrita));
+                cell.BorderColor = FontColour;
+                cell.HorizontalAlignment = 1;
+                Table8.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(oReporteOperatorio.Edad+" "+oReporteOperatorio.Sexo +" "+ oReporteOperatorio.Peso, MyFontNegrita));
+                cell.BorderColor = FontColour;
+                cell.HorizontalAlignment = 1;
+                Table8.AddCell(cell);
+                
+                /****/
+                cell = new PdfPCell(new Phrase("ESPECIALIDAD", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                cell.HorizontalAlignment = 1;
+                Table8.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("SERVICIO PISO", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                cell.HorizontalAlignment = 1;
+                Table8.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("CAMA", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                cell.HorizontalAlignment = 1;
+                Table8.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("HISTORIA CLINICA", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                cell.HorizontalAlignment = 1;
+                Table8.AddCell(cell);
+
+                /****/
+                cell = new PdfPCell(new Phrase("Rellenar", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                cell.HorizontalAlignment = 1;
+                Table8.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("Rellenar", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                cell.HorizontalAlignment = 1;
+                Table8.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(oReporteOperatorio.CodigoCama, MyFontNegrita));
+                cell.BorderColor = FontColour;
+                cell.HorizontalAlignment = 1;
+                Table8.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(oReporteOperatorio.NroHistoriaClinica.ToString(), MyFontNegrita));
+                cell.BorderColor = FontColour;
+                cell.HorizontalAlignment = 1;
+                Table8.AddCell(cell);
+
+                doc.Add(Table8);
+                /** columna anidada
+                PdfPTable nested = new PdfPTable(1);
+                nested.WidthPercentage = 100;
+                //nested.SpacingBefore = 10;
+                nested.DefaultCell.Border = 0;
+
+                cell = new PdfPCell(new Phrase("ORDEN", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                nested.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("DESTINO PACIENTE", MyFontNegrita));
+                cell.BorderColor = FontColour;
+                nested.AddCell(cell);
+
+                PdfPCell nesthousing = new PdfPCell(nested);
+                nesthousing.Padding = 0f;
+
+                Table6.AddCell(nesthousing);
+                **/
+
+                /** columna rowspan ( 
+                 
+                 **/
+
+                /******************************************************************************************/
+                /* 
+                 float[] columnWidths7 = { 300, 700 };
+                 PdfPTable Table7 = new PdfPTable(columnWidths7);
+                 Table7.WidthPercentage = 90;
+                 Table7.SpacingBefore = 10;
+                 Table7.DefaultCell.Border = 0;
+                */
+
+                /*
+                                PdfPTable table = new PdfPTable(4);
+                                table.TotalWidth = 400f;
+                                table.LockedWidth = true;
+
+                                PdfPCell header = new PdfPCell(new Phrase("Header"));
+                                header.Colspan = 4; table.AddCell(header);
+                                table.AddCell("Cell 1");
+                                table.AddCell("Cell 2");
+                                table.AddCell("Cell 3");
+                                table.AddCell("Cell 4");
+
+                                PdfPTable nested = new PdfPTable(1);
+                                nested.AddCell("Nested Row 1");
+                                nested.AddCell("Nested Row 2");
+                                nested.AddCell("Nested Row 3");
+
+                                PdfPCell nesthousing = new PdfPCell(nested);
+                                nesthousing.Padding = 0f;
+                                table.AddCell(nesthousing);
+
+                                PdfPCell bottom = new PdfPCell(new Phrase("bottom"));
+                                bottom.Colspan = 3;
+                                table.AddCell(bottom);
+
+                                doc.Add(table);
+
+                */
+
+
+                //PdfPTable Table7 = new PdfPTable(2);
+                //Table6.WidthPercentage = 90;
+                //Table6.SpacingBefore = 10;
+                //Table6.DefaultCell.Border = 0;
+
+                ////Table7.TotalWidth = 400f;
+                ////Table7.LockedWidth = true; 
+
+                ///* PdfPCell header = new PdfPCell(new Phrase("Header")); 
+                // header.Colspan = 2; 
+                // Table7.AddCell(header);
+                // Table7.AddCell("Cell 1");
+                // Table7.AddCell("Cell 2");
+                // Table7.AddCell("Cell 3");
+                // Table7.AddCell("Cell 4"); 
+                //*/
+
+                //PdfPTable nested = new PdfPTable(1);
+                //nested.WidthPercentage = 100;
+                //nested.SpacingBefore = 10;
+                //nested.DefaultCell.Border = 0;
+
+                //nested.AddCell("ORDEN:"); 
+                //nested.AddCell("DESTINO PACIENTE"); 
+
+
+                //PdfPCell nesthousing = new PdfPCell(nested); 
+                //nesthousing.Padding = 0f;
+                //Table7.AddCell(nesthousing);
+
+                ///*PdfPCell bottom = new PdfPCell(new Phrase("bottom")); 
+                //bottom.Colspan = 3;
+                //Table7.AddCell(bottom); 
+                //*/
+                //cell = new PdfPCell(new Phrase("1.- Diagnóstico Pre Operatorio", MyFontNegrita));
+                //cell.BorderColor = FontColour;
+                //Table7.AddCell(cell);
+
+                //doc.Add(Table7);
+
+
+                /******************************************************************************************
+
+                PdfPTable nested = new PdfPTable(5);
+                cell = new PdfPCell(new Phrase("Prueba Anidado", MyFontNegrita));
+                cell.BorderColor = fontblanco;
+                //tableWithRowspan1.AddCell(cell);
+
+                nested.AddCell(cell);
+                nested.AddCell("CMP : ");
+                nested.AddCell("74155");
+                nested.AddCell("RNE : ");
+                nested.AddCell("42391");
+                PdfPCell nesthousing = new PdfPCell(nested);
+                tableWithRowspan1.AddCell(nesthousing);
+                doc.Add(tableWithRowspan1);
+
+                ******************************************************************************************/
+                doc.Close();
+                writer.Close();
+                RptaEstado = true;
+            }
+            catch
+            {
+                RptaEstado = false;
+            }
+            return RptaEstado;
+        }
+        public ActionResult About()
+        {
+            ViewBag.Message = "Your application description page.";
+            return View();
+        }
+        public ActionResult Contact()
+        {
+            ViewBag.Message = "Your contact page.";
+
+            return View();
+        }
+    }
+
+
+}

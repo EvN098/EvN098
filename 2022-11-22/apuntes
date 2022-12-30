@@ -1,0 +1,35 @@
+pendientes:
+- revisar origen del error de conversion de  "apósitos" a "apásitos" 
+    ref: digemid, Facturación -> estado de cuenta 
+
+- crear script temporal para actualizar esos campos-> hecho
+
+- investigar api whatsapp - envío de correo con pdf adjunto -> cancelado de momento
+
+- agregar al kanban y comenzar reporte de punto de carga imágenes 
+- agregar texto al campo del reporte de hospitalización
+
+
+correción reporte excel hospitalizados.
+
+-- asignarme tarea: KanBan fila  123 
+poner asteriscos
+rellenar kanban -> dividir las tareas del proceso de automatización -> 
+    hallar diferencia de dias entre fechas de requerimiento y pendientes -> hecho 
+
+Averiguar como bloquear celdas en excel para kanban
+
+checkar diariamente el ingreso de los datos del tema de apositos 
+
+-> ver el reporte de consumo  -> dra cinthtya e ing. luis
+    -> "Erick, por favor elaborar el script de consulta a la base de datos para generar el reporte.
+        Luis, explicar el requerimiento a Erick, hacer seguimiento y revisión del reporte."
+
+f4+f4+f4+f6 -> cambiar de servidor en el galenhos
+
+
+LISTA DE SUSPENSIONES 2022 - NEUMO Y GASTRO VA EN -> CENTRO QUIRURGICO = SALA DE OPERACIONES 
+
+56.20 -> a cta de eder 
+
+martes 6 llenar logros desarrollo de software 

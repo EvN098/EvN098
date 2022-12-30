@@ -1,0 +1,32 @@
+Ficha familiar covid
+    -> el paciente requiere ser acompañado por un tutor, pero éste no tiene ficha covid, 
+    se requiere la generacion de su orden covid 
+    Solucion:
+    -> Modulo Laboratorio.
+        -> Pacientes externos lab 
+        -> ***buscar usando los filtros, si no se encuentra*** ->   agregar 
+        -> se abrirá una ventana donde deberemos ingresar el dni del padre para rellenar el formulario (* que el checkbutton sis no esté marcado) 
+        -> seleccionamos doble click sobre el resultado de la consulta hecha al poner el dni 
+        la pestaña paciente se divide en: datos historia clinica, datos de la madre o tutor , datos de domicilio
+            -> datos necesarios: apellido paterno, ap mat, fecha de nacimiento (poner enter para calcular edad)
+            ingresar cel1; en "Datos de la madre o tutor" repetir los datos de la historia clinica, rellenar las direcciones, 
+        
+        -> verificamos que el campo direccion este lleno con varios caracteres, en su defecto le ponemos varios "." 
+        -> llenamos el campo cel 
+        
+        -> nos vamos a la pestaña datos de cuenta -> llenamos el medico con el medico a cargo o que nos digan :v 
+        -> tipo paciente : familiar paciente 
+        -> llenamos el campo cuenta paciente con la cuenta que nos digan :v 
+        -> aceptar y a partir de ahí el médico sabrá llenar el resto ... 
+
+        1076 consultorio gastroenterologia
+        2098 
+
+        dra zavala 
+
+4015        paciemte con cita 
+referencia de consultorios externos 
+81949204
+
+
+

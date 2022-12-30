@@ -1,0 +1,87 @@
+Reunion 12.30 minsa -> Telesalud usando teleatiendo
+
+Para repasar:
+checkar cristal report 
+creacion de apis
+
+/***************************************************************************/
+//Me hicieron llegar un correo para generar nuevs respuestas rapidas 
+//Respuestas rapidas  ->dra. ANA MARIA VALVERDE BEJAR
+tablas de referencia: 
+select *  from ConclusionesSolicitudCita where idEstado=1 order by idFinanciador
+select * from tabSubTipoFinanciadorWeb
+select * from tabEstadosSolicitudCita​
+
+Id
+idEstadoSolicitudCitaOrigen
+idEstadoSolicitudCitaDestino
+-Motivo
+-Evaluacion
+idConclusion
+-Conclusion
+idRecomendacion
+-Recomendacion
+-Observacion
+indRecomendacion
+idEstado
+idFinanciador
+
+
+CONDICIÓN	 ( idEstadoSolicitudCitaDestino )
+-MOTIVO	
+-EVALUACIÓN	
+-CONCLUSION	
+-RECOMENDACIÓN	
+-OBSERVACIÓN
+
+
+/********************************************************************/
+idestado    descripcion
+
+1	        Pendientes
+2	        Por Validar Auditoria
+3	        Aprobado
+4	        Observado
+5	        Citado
+6	        No Citado Sin Turno
+7	        Reevaluar
+8	        Cerrado
+9	        Solicitudes Por Validar Coordinacion
+10	        Aprobado Externo
+11	        Por Validar Gestion
+12	        Pendiente Documentacion
+13	        Citado Pagado
+
+
+flujo: 
+2 -> 3      Por Validar Audit. -> Aprobado
+7 -> 3      Reevaluar -> Aprobado
+9 -> 3      Solicitudes Por Validar Coordinacion -> Aprobado
+
+2 -> 4      Por Validar Auditoria -> Observado
+7 -> 4      Reevaluar -> Observado
+9 -> 4      Solicitudes Por Validar Coordinacion -> Observado
+
+
+//no aprobado = observado
+
+en el excel : armar cadena para autotizar los inserts 
+
+para cartas de Garantia repartir entre los siguientes idfinanciamiento :
+2 SALUDPOL
+3 CARTA EPS
+5 SOAT
+6 FOSMAR
+
+
+recibiendo identificar llamadas top 10 - motivos y hacer manual de resolucion 
+*********** top de motivos llamadas ***********
+1 - Reprogramacion de doctores ( De: CLARIBEL ESTELA CHANAME CHUMAN  -> siempre a solicitud de claribel 
+                                Para: SOPORTE INFORMATICO <soporteinformatico@insnsb.gob.pe>; EDER YAMILL PALOMINO ESPINOZA <epalomino@insnsb.gob.pe>
+                                CC: SHARON NINOSKA SANCHEZ ZELA <ssanchez@insnsb.gob.pe>; OSCAR ALFREDO BROGGI ANGULO <abroggi@insnsb.gob.pe>)
+
+2 -                                 
+
+!!!Hacer la reprogramacion de los dos doctores que me envio eder 
+->HECHO, el ultimo doctor ya estaba en esa programación por lo que solo reprogramé 1 doctor
+

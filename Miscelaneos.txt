@@ -1,0 +1,257 @@
+Terminar con al menos un pdf para hoy
+corte ( reunion con el ingeniero ) hoy 12.00
+Se otorgaron credenciales, correo para iniciar sesion en outlook y en la pc
+
+
+
+/****************************************************************************************/
+Correo Outlook 
+Correo: eramoss@insnsb.gob.pe
+contraseña: E...conson_nom_2022
+/****************************************************************************************/
+Usuario pc 
+User: eramoss
+contraseña: E...conson_nom_2022
+/****************************************************************************************/
+accesos sql server
+servidores: 
+    - 10.5.0.16 (Produccion)
+    - 10.5.0.22 (Pruebas)
+    - 10.5.0.23 (Desarrollo)
+    usuario: eramoss
+    pass: Evn574...
+    
+    usuario especial: AppUser_INTERFACE // NO USAR SIN AUTORIZACION, SOLICITAR A CHICOMA O AL ING LA EJECUCION DE SCRIPTS QUE NECESITEN PERMISOS ELEVADOS
+    pass: ??? 
+
+Servidor donde se alojan los robots (entre ellos las alertas)
+    -10.5.0.33   //Servidor remoto
+    usuerio: desarrollo
+    Contra: Desa.2016
+
+/****************************************************************************************/
+Nombre equipo: INSNSB-05388
+obs: traer laptop para que lo configuren para acceso remoto 
+     -registrar laptop en la entrada
+     -pedir que dejen abierto anydesk 
+     -
+
+si se ejecuta al primer dia 
+si se ejecuta cada 2 dias 
+/****************************************************************************************/
+
+Pagina para grabar: Apowersoft
+
+Pendientes:
+
+
+Para la obtención de los datos para reporte operatorio se ejecuta el siguiente SP:
+
+ 
+BD : SIGH
+Sp: usp_select_ReporteOperatorioCompletoPorId_16082022
+
+Parámetro: número operatorio
+
+Datos de ejemplo quemado: 24360
+
+Datos de ejemplo quemado: 24377
+
+/******************************************************************************************************/
+Para pruebas ReporteOperatorio: 
+servidor: 10.5.0.22 
+BD : SIGH
+Sp: usp_select_ReporteOperatorioCompletoPorId_16082022
+IdReporteOperatorio : 10 ó 22264
+
+
+Para obtener diagnósticos(pre operatorio) .. el parámetro es : idsolicitudqx
+usp_select_SolicitudQxDiagnosticosSeleccionarTodosPorIdSolicitudQx_03092018
+
+Para obtener diagnósticos(post  operatorio) .. el parámetro es : idReporteOperatorio
+usp_select_ReporteOperatorioDiagnosticosSeleccionarTodosPorIdReporteOperatorio_03092018
+
+Para obtener Cirugía programada: .. el parámetro es : idsolicitudqx
+usp_select_SolicitudQxCPTSeleccionarTodosPorIdSolicitudQx_03092018
+
+Cirugia realiazada:  el parámetro es : idorden
+FacturacionServicioDespachoFiltraPorIdOrden
+
+
+/******************************************************************************************************/
+Obs: Sin permisos para ejecutar el sp "usp_select_ReporteOperatorioCompletoPorId_16082022" 
+en produccion
+
+/******************************************************************************************************/
+wordpress: para acceder al cpanel : 
+url+ /ikhodi-olympo
+
+se usa DIVI Constructor
+
+link para editar comunicados en www.insnsb.gob.pe :
+
+https://www.insnsb.gob.pe/wp-admin/post.php?post=1857&action=edit
+
+/******************************************************************************************************/
+acceder a otras rutas de red : ctr+r 
+-> \\INSNSB-OP03
+    -> compartir 
+        -> Zoom
+
+
+/******************************************************************************************************/
+ 
+Direccion Ejecutiva de la unidad de tecnologia de la informacion:
+area Desarrollo.
+
+Nombre Impresora:
+lexmar mx710
+/******************************************************************************************************/
+Anexos Numeros: 
+2211 - Soporte Informatico 
+6107 - Ing. Chicoma 
+3024 - Ing. David Lozano
+2099 - Ing. Ronald Vargas 
+
+Anexos otras areas:
+6201 - Jhon Cuadros 
+
+/******************************************************************************************************/
+*** Miembros - Integrantes - Personal ***
+
+Ing. Ronald Vargas : coordinador informatica
+Ing. Alberto Machado : Director de Unidad de Tecnología de Información
+
+Nombre de nuestra Directora: Sulema *Torres
+
+William - Jefe de Archivos
+
+2211 Soporte Informatico
+
+*Plataforma Informatica
+6201 jhon Cuadros Informatica
+
+*Area de Imagenes
+Dra. Claudia Lazarte	Jefa Sub Unidad de Imágenes
+Elia Gutierrez	Asistente Administrativo de Unidad de Imágenes
+
+*Area de Seguros
+Lic. Lily Chalco - Coordinador de Equipo de Liquidación de Seguros
+Dra. Ana María Valverde - Jefa del Área de Seguros
+
+*Area de Anatomia Patologica
+Dra. Geovanna Gutiérrez Iparraguirre	Jefa del Servicio de Anatomía Patológica
+
+configuracion de acceso remoto: 
+eduardo mori 
+jhonny 
+
+
+/******************************************************************************************************/
+verificar servidores:
+ping 10.5.0.21 
+ping 10.5.0.16
+
+/*******************************************************************************************************/
+pedirle a Luis que me explique el formato de entrega ( supongo que TDR )
+Entrega de los informes al dia 20 ( max dia 25 )
+
+\\INSNSB-22533 -> Chicoma 
+\\INSNSB-op01 -> Edder 
+\\INSNSB-op02 -> Ing. David
+\\INSNSB-op03 -> Luis
+\\INSNSB-op04 -> Ricardo
+\\INSNSB-05388 -> Marco
+\\INSNSB-TILP1 -> Erick-laptop  -> 
+\\INSNSB-DESA1-HV -> usu : insnsb\eramoss Erick-Virtual-Remoto -> ip: 10.5.0.81
+
+\\INSNSB-op08 -> soporte insnsb -> carpetas de instaladores ( office, drivers de la impresora, entre otros )
+
+
+/*******************************************************************************************************/
+New TightVNC Connection: app para conectarse remotamente
+remote host: INSNSB-(num del equipo)
+contraseña: in$n
+
+/*******************************************************************************************************/
+sysgalenplus: eramoss
+clv: E num 789
+
+/*******************************************************************************************************/
+Detener servicio del remoto 
+services.msc
+TightVNC Server -> Iniciar / Detener Proceso 
+
+/*******************************************************************************************************/
+
+/*******************************************************************************************************/
+el nombre del equipo y la version se encuentras en la parte inferior del galenhos
+usuario: nombre usuario // servidor: servbd.. // c\rutadel programa\ - PC: INSNSB-NumeroEquipo // instituto nacional ... // SGP: VERSION 
+
+/*******************************************************************************************************/
+*es obligatorio el envio de diagrama pareto de las incidencias de llamadas 
+
+/*******************************************************************************************************/
+rutas de videos y otros instructivos:
+\\SRVDB05\desarrollo$\5-Documentacion\6-Manuales SisgalenPlus\Videos Induccion
+-> videos de induccion galenhos
+
+rutas formatos kanBan 
+\\SRVDB05\desarrollo$\0-Documentacion$\00WorkingDev
+
+rutas de excels de llamadas telefonicas:
+\\SRVDB05\desarrollo$\0-Documentacion$\99Varios\99-HACKATHON
+-> documentos copiados a carpeta local documentos
+
+ruta excel de incidencias para registrar llamadas por semana:
+\\SRVDB05\desarrollo$\0-Documentacion$\00WorkingDev
+-> excel copiado a local 
+
+ruta scripts:
+\\SRVDB05\desarrollo$\0-Scripts$
+
+inicio : 10:57 10:59
+
+//se creó la tarea envioReporteHospitalizacion
+
+//reporte imagenes 
+
+para casos en los que se requiera:
+aperturar cuenta en sis o galenos -> anexo 1037
+
+/*******************************************************************************************************/
+uso de la impresora:
+meter documentos de manera que la entrada de la impresora coincida con la cabeza del documento.
+.> seleccionar perfil y de ahi seguir todo de manera intuitiva
+
+/*******************************************************************************************************/
+Siabel : app web que sirve para la mensajeria
+Trello : app web para registrar tareas y pendientes manejando estados
+slack  : app web para mensajeria
+slack  : app web para mensajeria
+genmymodel  : app web para modelado y diagramacion
+
+git remote add origin https://EvNCrS@bitbucket.org/EvNCrS/INSNSB.git
+
+git@bitbucket.org:EvNCrS/insnsb.git
+
+
+ip pc marco: 172.16.14.159
+
+script limpiar atencion , consulta externa -> atenciones de consulta externa -> cambiar consulta de atentido a  citado 
+
+"C:\\1_\\2_proyectos\\PruebaExcelEmail\\bin\\Release\\netcoreapp3.1\\uploads"	string
+
+general: 
+    run whether user is logged on or not 
+    run with highest privileges
+triggers:
+    daily 
+    stop if task run longer than 10
+conditions . 
+
+settings : 
+allow task to be run on demand
+stop the task if runs longer than 2 
+if the running tas does not end when request force it to stop
+

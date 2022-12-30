@@ -1,0 +1,24 @@
+Apuntes 2022-12-28
+-Se creó el sp [USP_ALERTA_MENSAJERIA_DESTINATARIOS]
+
+ALTER PROCEDURE [dbo].[USP_ALERTA_MENSAJERIA_DESTINATARIOS]
+@IdAlerta  int
+AS
+BEGIN
+	select d.IdAlertaDestinatario, d.IdAlerta, d.IdEmpleado , d.TipoDestinatario, d.Correo, d.Telefono, d.IdEstado
+	from TabAlertaMensajeriaDestinatarios d
+	inner join TabAlertaMensajeria a on a.idalerta = d.idalerta
+	where a.IdEstado = 1 and d.IdEstado = 1 and a.IdAlerta = @IdAlerta
+
+    select *
+    from TabAlertaMensajeriaDestinatarios 
+    where idalerta = (select idalerta from TabAlertaMensajeria where idalerta = @idalerta and IdEstado = 1)
+END
+
+
+- Revisar SignalR y websockets 
+
+- comparar las tablas usadas en los querys :
+	-[USP_TRAMA_SEGUIMIENTO_HOSPITALIZADOS_V4]
+	-[Report_Consulta_HospDiag_2] ( store almacenado en S_ESTADISTICO )
+

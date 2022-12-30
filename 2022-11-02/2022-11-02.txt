@@ -1,0 +1,40 @@
+lun - viernes
+7 - 16
+8 - 17
+
+sabado
+7 - 12
+8 - 13
+
+Horario agregado:
+lun - vie
+9 - 18
+(asignado a Edder y Ricardo, por confimar)
+
+------------------------------------------
+Iteraciones 15 dias
+Nuevo Kanban .> Anatomia Patologica
+kanban por proyecto y general
+
+------------------------------------------
+
+color amarillo -> Terminado las partes del proyecto
+si se terminó todo el proyecto aparte de pintar de amarillo se pone "Terminado"
+
+------------------------------------------
+
+Prioridades:
+Buenas Practicas y pdfs
+
+------------------------------------------
+Tarea actual: 
+hi: 11.30
+
+Por ahora checkar los de la exportacion de sql server a excel 
+
+el reporte se quiere enviar temprano a tods los directores
+el reporte esta dividido en hojas segun cada tipod e hospitalizacion
+
+Obtener acceso a \\SRVDB05\desarrollo$
+-> 0-scripts$
+------------------------------------------

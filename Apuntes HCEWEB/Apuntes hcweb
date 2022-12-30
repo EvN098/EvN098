@@ -1,0 +1,6 @@
+Se usa 3 conexiones para la bd 
+cn          ->  10.5.0.16, SIGH
+cnInterface ->  10.5.0.16, SIGH_INTERFACE
+cnDigital   ->  10.5.0.16, SIGH_DIGITAL
+cnFile      ->  10.5.0.16, SIGH_FILE
+cnWebBDPUB  ->  192.168.10.13,1330; SIGH_WEBPUB

@@ -1,0 +1,41 @@
+-Ings. Chicoma y Luis:
+Terminar con Reporte Operatorio - 
+-> pasar reporte operatorio a cristal report ( repasar )
+- reunion todos a a las 11 - 12
+
+
+-Terminar con la generacion de los datos en excel
+
+
+Queda pendiente los permisos 
+
+chicoma explicacion investigacion del excel generado 12 aprox 
+reunion 9 - 10 con ricardo para integrar el pdf y el proceso de firma 
+a hceweb
+Postergado a las 10 la reunion con ricardo , no se ha podido avanzar nada hasta el momento, averiguar una forma
+de mejorar la velocidad de procesamiento
+
+/**********************************************************************************************************************************/
+Temas de la reunion 11am:
+-Explicacion de los cambios en el metodo de firmado 
+
+-Anteriormente se usaba la data de sigh enviada de galenos al hceweb,
+el cual se encargaba de crear los pdfs con la data de sigh y despues de crearlos
+se enviaban a un firmador, este lo enviaba a signalr el cual avisaba 
+que ya estaba firmado al hcweb y también guardaba automaticamente el pdf firmado en
+sigh_digital
+
+-Ahora el galenos guarda la data y el pdf creados SIN firmar en las tablas 
+prefirma, precabecera* y predetalle*, 
+*creo que envia una url con datos para identificar el pdf 
+al hceweb 
+el hcweb se encarga de leer esa data y lo envia al firmador  y luego al 
+signalr 
+la respuesta se envia mediante un url al galenos o algo asi
+
+/**********************************************************************************************************************************/
+
+Conclusion de la reunion: 
+-Investigar en ratos libres integration Services 
+-Comenzar con el programa de envio de excels en visual studio 
+

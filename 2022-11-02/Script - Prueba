@@ -1,0 +1,294 @@
+--serv 23
+use SIGH
+
+;with cte as (  
+     select 
+		a.IdAtencion,
+		a.IdPaciente,
+		a.IdCuentaAtencion,
+		a.IdServicioIngreso,
+		s.Nombre as servicio,
+		s.IdTipoServicio
+      from dbo.Atenciones (nolock) a  
+		left join dbo.FacturacionCuentasAtencion (nolock) fca on a.IdCuentaAtencion=fca.IdCuentaAtencion  
+		left join dbo.Servicios (nolock) s on A.IdServicioEgreso=s.IdServicio  
+		where a.idTipoServicio in (3) and a.esPacienteExterno<>1  
+		and 
+		(  
+			--(a.FechaEgreso is null and fca.IdEstado in (1,12) and s.IndEgresoFisico is null)
+			(a.FechaEgreso is null and fca.IdEstado in (1,12) and a.IndEgresoFisico is null)
+			or  
+			--(a.FechaEgresoFisico is null and fca.IdEstado in (1,10,12) and s.IndEgresoFisico =1)
+			(a.FechaEgresoFisico is null and fca.IdEstado in (1,10,12) and a.IndEgresoFisico =1)
+		)    
+  )
+
+  ,ctd as (
+	  select 
+	  ah.IdEstanciaHospitalaria,
+	  cte.IdAtencion,
+	  at.IdCuentaAtencion,
+	  ah.IdServicio,
+	  ah.IdCama,
+	  FechaOcupacion,
+	  FechaDesocupacion,
+	  Servicio=se.nombre,
+	  se.IdTipoServicio,
+	  se.idEje,
+	  rn=row_number() over(partition by cte.idatencion order by cte.idatencion,ah.FechaOcupacion desc,ah.secuencia desc)
+	 from cte 
+	 inner join atenciones at on cte.idpaciente=at.IdPaciente and at.IdTipoServicio in(2,3) --on 
+	 inner join AtencionesEstanciaHospitalaria ah on at.IdAtencion=ah.IdAtencion
+	 inner join servicios se on ah.IdServicio=se.IdServicio 
+  )
+
+  
+  ,cte1 as (  
+		select 
+		a.IdEstanciaHospitalaria,
+		a.IdAtencion,
+		a.IdCuentaAtencion,
+		a.IdServicio,
+		a.IdCama,
+		a.FechaOcupacion,
+		FechaDesocupacion0=a.FechaDesocupacion,
+		FechaDesocupacion=CASE WHEN a.FechaDesocupacion IS NULL THEN b.FechaOcupacion  ELSE a.FechaDesocupacion END,
+		a.Servicio,
+		a.IdTipoServicio,
+		a.idEje,
+		a.rn
+	 from ctd a
+	 left join ctd b on a.IdAtencion=b.IdAtencion and a.rn=b.rn+1
+  )
+
+  ,cte0 as (  
+   select 
+      cte1.IdEstanciaHospitalaria,
+	  cte1.IdAtencion,
+	  cte1.IdCuentaAtencion,
+	  cte1.IdServicio,
+	  cte1.IdCama,
+	  cte1.FechaOcupacion,
+	  cte1.FechaDesocupacion,
+	  cte1.Servicio,
+	  cte1.IdTipoServicio,
+	  cte1.idEje,
+	  rn=ROW_NUMBER() over (partition by cte1.idatencion order by cte1.idatencion, cte1.rn asc)  
+   from cte1 where  cte1.idEje is not null  
+  )
+
+  ,ctc as(
+  select 
+  IdAtencion,
+  cte0.IdServicio,
+  serviciotranf=servicio,
+  sum(datediff(day,FechaOcupacion,isnull(FechaDesocupacion,getdate()))) as dias 
+  from cte0  
+  where IdTipoServicio=3
+  group by IdAtencion,IdServicio,servicio
+  ),
+
+  cte2 as (  
+   select  
+   Ideje = case when e.IdEje is not null then e.IdEje  
+       else case when e2.ideje is not null then e2.ideje else null end end,  
+   Eje = case when e.IdEje is not null then e.Descripcion  
+       else case when e2.ideje is not null then e2.Descripcion else null end end,  
+   IdServicio = case when e.IdEje is not null then s.IdServicio  
+         else case when e2.ideje is not null then s2.IdServicio else null end end,  
+   Servicio = case when e.IdEje is not null then s.Nombre  
+       else case when e2.ideje is not null then s2.Nombre else null end end,  
+   IdservicioAct	=s.IdServicio,  
+   ServicioAct		=s.Nombre,  
+   Estrato = case	when e.IdEje is null and e2.IdEje is not null and s.nombre like '%SOP%' then 'SALA DE OPERACIONES (SOP)'  
+					when e.IdEje is null and e2.IdEje is not null and s.nombre not like '%SOP%' then 'PROCEDIMIENTOS'  
+					when e.IdEje is not null and s.IdServicio is not null and s.CamasOperativas<>0 and e.IdEje=10 then 'EMERGENCIA EN SERVICIO'  
+					when e.IdEje is not null and s.IdServicio is not null and (s.CamasOperativas=0 or s.CamasOperativas is null) and e.IdEje=10 then 'EMERGENCIA EN ATENCION'  
+					else 'HOSPITALIZADOS' end,  
+   Ocupadas = case when e.IdEje is not null and at.IndEgresoFisico=0 and fca.IdEstado<>10 then 1 else 0 end,  
+   EnTransito = case when e.IdEje is null and e2.IdEje is not null and at.IndEgresoFisico =0 and fca.IdEstado<>10 then 1 else 0 end,  
+   AltaCurso = case when e.IdEje is not null and at.IndEgresoFisico=0 and fca.IdEstado=10 then 1 else 0 end,  
+   EnServicio = case when e.IdEje is not null and s.IdServicio is not null and at.IndEgresoFisico =0 and fca.IdEstado<>10 and s.CamasOperativas<>0 then 1 else 0 end,  
+   AltaCursoE = case when e.IdEje is not null and s.IdServicio is not null and at.IndEgresoFisico = 0 and fca.IdEstado=10 and s.CamasOperativas<>0 then 1 else 0 end,  
+   EnAtencion = case when e.IdEje is not null and s.IdServicio is not null and at.IndEgresoFisico =0 and fca.IdEstado<>10 and (s.CamasOperativas=0 or s.CamasOperativas is null) then 1 else 0 end,  
+    p.FechaNacimiento, p.NroHistoriaClinica, c.Codigo, c.IdPresupuestada, indCamaFija=isnull(convert(int,c.indCamaFija),0),  
+   Nombre=replace(replace(replace(isnull(p.ApellidoPaterno,''),char(13),''),char(10),''),char(9),'')+' '+  
+   replace(replace(replace(isnull(p.ApellidoMaterno,''),char(13),''),char(10),''),char(9),'')+' '+  
+   replace(replace(replace(isnull(p.PrimerNombre,''),char(13),''),char(10),''),char(9),'')+' '+  
+   replace(replace(replace(isnull(p.SegundoNombre,''),char(13),''),char(10),''),char(9),''),  
+   Edad=dbo.fnCalAgeMothDay(p.FechaNacimiento), Genero=case when p.IdTipoSexo=1 then 'M' else 'F' end,  
+   FechaIngreso=cast(at.FechaIngreso as date),  
+   FechaIngresoServ=cast(a.FechaOcupacion as date),  
+   estancia_serv=DATEDIFF(day, a.FechaOcupacion, Getdate()),  
+   at.IdCuentaAtencion  ,at.IdAtencion    
+   , x.Diagnostico as Dx1,y.Diagnostico as Dx2,z.Diagnostico as Dx3
+   ,EstadoCuenta=ec.Descripcion  
+   ,
+    Provincia=pr.Nombre, 
+	Departamento=dep.Nombre ,
+	Ubigeo=right('0'+cast(di.IdReniec as varchar(6)),6) ,
+	at.idcuentavinculada,
+	at.idpaciente,	
+	ev.FechaHoraEvolucion,  
+	ev.PreAlta_Alta	
+   from cte1 a
+	left join (  
+      select a.IdAtencion, Diagnostico=d.CodigoCIE10 +'-'+ d.Descripcion, rn=ROW_NUMBER() over (partition by a.Idatencion order by IdAtencionDiagnostico asc)  
+      from sigh.dbo.Atenciones (nolock) a  
+       left join sigh.dbo.FacturacionCuentasAtencion (nolock) fca on a.IdCuentaAtencion=fca.IdCuentaAtencion  
+       left join AtencionesDiagnosticos (nolock) ad on a.IdAtencion=ad.IdAtencion  
+       left join Diagnosticos (nolock) d on ad.IdDiagnostico=d.IdDiagnostico  
+      where ad.idTipoServicio in (3) and a.esPacienteExterno<>1 
+    ) x on a.IdAtencion=x.IdAtencion and x.rn=1   
+	left join (  
+      select a.IdAtencion, Diagnostico=d.CodigoCIE10 +'-'+ d.Descripcion, rn=ROW_NUMBER() over (partition by a.Idatencion order by IdAtencionDiagnostico asc)  
+      from sigh.dbo.Atenciones (nolock) a  
+       left join sigh.dbo.FacturacionCuentasAtencion (nolock) fca on a.IdCuentaAtencion=fca.IdCuentaAtencion  
+       left join AtencionesDiagnosticos (nolock) ad on a.IdAtencion=ad.IdAtencion  
+       left join Diagnosticos (nolock) d on ad.IdDiagnostico=d.IdDiagnostico  
+      where ad.idTipoServicio in (3) and a.esPacienteExterno<>1 
+    ) y on a.IdAtencion=y.IdAtencion and y.rn=2
+	left join (  
+      select a.IdAtencion, Diagnostico=d.CodigoCIE10 +'-'+ d.Descripcion, rn=ROW_NUMBER() over (partition by a.Idatencion order by IdAtencionDiagnostico asc)  
+      from sigh.dbo.Atenciones (nolock) a  
+       left join sigh.dbo.FacturacionCuentasAtencion (nolock) fca on a.IdCuentaAtencion=fca.IdCuentaAtencion  
+       left join AtencionesDiagnosticos (nolock) ad on a.IdAtencion=ad.IdAtencion  
+       left join Diagnosticos (nolock) d on ad.IdDiagnostico=d.IdDiagnostico  
+      where ad.idTipoServicio in (3) and a.esPacienteExterno<>1 
+    ) z on a.IdAtencion=z.IdAtencion and z.rn=3 
+    inner join Atenciones (nolock) at on a.IdAtencion=at.IdAtencion  
+    inner JOIN dbo.FuentesFinanciamiento (nolock) ff ON at.idFuenteFinanciamiento = ff.IdFuenteFinanciamiento  
+    inner join dbo.FacturacionCuentasAtencion (nolock) fca on at.IdCuentaAtencion=fca.IdCuentaAtencion  
+    inner join dbo.EstadosCuenta (nolock) ec on fca.IdEstado=ec.IdEstado  
+    inner JOIN dbo.Pacientes (nolock) p ON at.IdPaciente = p.IdPaciente  
+    inner join dbo.TiposSexo (nolock) ts on p.IdTipoSexo=ts.IdTipoSexo  
+    left join dbo.TiposOrigenAtencion (nolock) toa on at.IdOrigenAtencion=toa.IdOrigenAtencion
+		left join dbo.Distritos (nolock) di on p.IdDistritoDomicilio=di.IdDistrito  
+		left join dbo.Provincias (nolock) pr on di.IdProvincia=pr.IdProvincia  
+		left join dbo.Departamentos (nolock) dep on pr.IdDepartamento=dep.IdDepartamento 
+    left join cte0 b on a.IdAtencion=b.IdAtencion and b.rn=1  
+    left join Servicios (nolock) s on a.IdServicio=s.IdServicio  
+    left join eje (nolock) e on s.IdEje=e.IdEje  
+    left join Servicios (nolock) s2 on b.IdServicio=s2.IdServicio 
+    left join eje (nolock) e2 on s2.IdEje=e2.IdEje  
+    left join dbo.Camas (nolock) c on a.IdCama=c.IdCama  
+	left join (  
+		select  
+		 ae.idCuentaAtencion,  
+		 FechaHoraEvolucion = ae.Fecha + ' ' + ae.Hora,      
+		     
+		 PreAlta_Alta = case when a.FechaEgresoAdministrativo is not null then 'ALTA-ADM' 
+			  when fca.IdEstado = 10 or a.FechaEgreso is not null then 'ALTA-MED' ELSE '' END,    
+		 rn=ROW_NUMBER() over (partition by ae.idCuentaAtencion order by ae.IdEvolucion desc)   
+		 from AtencionesEvolucion ae  
+		  inner join atenciones a on ae.idCuentaAtencion = a.IdCuentaAtencion  
+		  inner join FacturacionCuentasAtencion fca on ae.IdCuentaAtencion = fca.IdCuentaAtencion        
+		 where ae.idEstado=1  
+    ) ev on a.IdCuentaAtencion=ev.IdCuentaAtencion and ev.rn=1   
+	where a.rn=1	 
+  )
+ select 
+   cte2.Eje
+  ,cte2.Servicio
+  --cte2.ServicioAct
+  ,isnull(cte2.Codigo,'') as Cama
+  ,cte2.Nombre as Paciente
+  ,cte2.Edad
+  ,cte2.Genero
+
+  ,cte2.IdCuentaAtencion
+  ,Dx1=isnull(cte2.Dx1,'')
+  ,Dx2=isnull(cte2.Dx2,'')
+  ,Dx3=isnull(cte2.Dx3,'')
+  ,cte2.EstadoCuenta
+  ,servTrasf=ctc.serviciotranf 
+  ,dias		=ctc.dias
+  ,cte2.Departamento
+  ,cte2.Provincia
+  ,FechaHoraEvolucion=isnull(cast(FechaHoraEvolucion as varchar(30)),'')
+  ,PreAlta_Alta=isnull(PreAlta_Alta,'')
+  into #datamax
+  from cte2  
+  inner join ctc on cte2.IdAtencion=ctc.IdAtencion
+  where (Ocupadas<>0 or EnTransito<>0 or AltaCurso<>0)
+  order by cte2.Eje,cte2.Servicio,cte2.Nombre
+
+DECLARE @Servicios AS TABLE(ID INT IDENTITY NOT NULL PRIMARY KEY, Servicio VARCHAR(300) NOT NULL)
+insert into @Servicios
+select distinct Servicio from #datamax order by Servicio
+
+declare @j int=1
+declare @servicio varchar(300)
+select * from @Servicios
+WHILE @j <= (SELECT MAX(ID) FROM @Servicios)
+begin
+	set @servicio = (select Servicio from @Servicios where ID=@j)
+	select * 
+	into #data 
+	from #datamax 
+	where Servicio=@servicio
+	set @j=@j+1
+
+	----------------------PIVOT---------------------------------
+	create table #Titulos(ID INT IDENTITY NOT NULL PRIMARY KEY, Titulo VARCHAR(200) NOT NULL)
+	DECLARE @CadenaTitulos NVARCHAR(MAX)=''
+	DECLARE @CadenaTitulos_sinnull NVARCHAR(MAX)=''
+	DECLARE @i INT
+	DECLARE @TituloActual VARCHAR(200)=''
+	INSERT INTO #Titulos
+	SELECT distinct servTrasf FROM #data p order by servTrasf
+
+	SET @CadenaTitulos = '[' + (SELECT Titulo FROM #Titulos WHERE ID = 1) + ']'
+	SET @CadenaTitulos_sinnull = 'isnull([' + (SELECT Titulo FROM #Titulos WHERE ID = 1) + '],0) as [ '+ (SELECT Titulo FROM #Titulos WHERE ID = 1)+N']'
+
+	SET @i = 2
+	WHILE @i <= (SELECT MAX(ID) FROM #Titulos)
+		   BEGIN
+				SET @TituloActual = (SELECT Titulo FROM #Titulos WHERE ID = @i)
+				SET @CadenaTitulos = @CadenaTitulos + N',['+ @TituloActual + N']'
+				SET @CadenaTitulos_sinnull = @CadenaTitulos_sinnull + N',isnull(['+ @TituloActual + N'],0) as [ '+ @TituloActual + N']'
+				SET @i = @i + 1
+		   END
+	DECLARE @SQL NVARCHAR(MAX)=''
+	SET @SQL = N'
+	SELECT 
+	Eje
+	,Servicio
+	,Procedencia
+	,Paciente
+	,Departamento
+	,Provincia
+	,Edad
+	,Genero
+	,FechaIngresoHosp
+	,dias_hosp
+	,' + @CadenaTitulos_sinnull + '
+	,Dx1
+	,Dx2
+	,Dx3
+	,Cama
+	,FechaHoraEvolucion
+	,PreAlta_Alta
+	,[Dificultades en la evolucion - SisGalenPlus]=Dificultades
+	,FechaProbableAlta=''''
+	,NudoCritico=''''
+	FROM (
+	select * from #data
+	) pvt
+	PIVOT (sum(Dias) FOR [servTrasf] IN (' + @CadenaTitulos + ')) AS Child'
+
+	EXECUTE SP_EXECUTESQL @SQL
+	-------------------FIN PIVOT ----------------------------------------------------
+	SET @CadenaTitulos =''
+	SET @CadenaTitulos_sinnull = ''
+	drop table #Titulos
+	drop table #data
+end
+
+DROP TABLE #datamax
+
+
+
+
+(Proced Dx: OH=Orden Hosp, OM=En Orden Médica, EV=Dx en Evolución, QX=SOP)
+(Tipo Dx: P=Principal, S=Secundario)

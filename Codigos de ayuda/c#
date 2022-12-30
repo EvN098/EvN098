@@ -1,0 +1,8 @@
+//Crear cadena de conexion con usuario y password de sql: 
+<add name="cn" connectionstring="data source=10.5.0.16;initial catalog=sigh;persist security info=true;user id=appuser_interface;password=s$nt1p0d4xt#a;multipleactiveresultsets=true" providername="system.data.sqlclient" />
+
+//Obtener fecha dia inicial y dia final de un mes:
+DateTime date = DateTime.Now;
+DateTime oPrimerDiaDelMes = new DateTime(date.Year, date.Month, 1);
+DateTime oUltimoDiaDelMes = oPrimerDiaDelMes.AddMonths(1).AddSeconds(-1);
+

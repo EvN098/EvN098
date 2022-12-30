@@ -1,0 +1,27 @@
+apuntes 2022-12-17
+
+- checkar el doc de standart 
+triaje
+*mejorar robot sis que envía por correo?
+
+Información brindada por el ing. David:
+
+CEPEHO  -> GESTION PERUANA DE HOSPITALES - Compañia privada que terceriza algunos servicios del hospital, entre ellos algunos servicios de laboratorio
+
+FUA     -> Formato Único de Atención , documento que consta de momento de dos caras : 1 cara llenada por el doctor y la otra cara llenada por las áreas involucradas en la atención del paciente.
+          * se quiere cambiar el formato actual del FUA y separar una hoja para cada area involucrada ( cada área pondrá su firma digital, una sola cara para cada área es poco practico )
+          * El FUA es requerido para cobrar la atención de los pacientes, sirve como un tipo de factura 
+
+RISPACK -> Sistema usado para el área de imágenes, *kstring-> mencionado, verificar nombre y detalles     
+
+MARCA DE HECHO -> informe del tecnólogo ( encargado de sacar las imágenes ) de que ya se atendió al paciente. Requerido para ponerlo en el FUA 
+
+NUMERO DE ATENCION = NUMERO DE CUENTA
+
+SINLAB -> Sistema usado en laboratorio 
+
+*Los robots 
+
+16905
+
+error : no permite agregar el triaje, el botón de guardar sale deshabilitado

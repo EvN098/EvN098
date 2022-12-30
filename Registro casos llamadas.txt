@@ -1,0 +1,518 @@
+/*******************************************************************************************************************************************************/
+/*******************************************************************************************************************************************************/
+        temas a solucionar segun la lista de mas llamadas de los usuarios:
+
+1. Ficha covid
+2. Farmacia
+3. Economia 
+4. Seguros
+5. Citas
+6. Asistentes adm.
+7. Triaje
+8. Seguros
+9. Farmacia
+10. Contrareferencia
+11. Farmacia
+12. Referencia
+13. Reporte Operatorio
+14. Economia
+15. Centro Quirurgico
+
+/*******************************************************************************************************************************************************/
+/*******************************************************************************************************************************************************/
+/*******************************************************************************************************************************************************/
+
+casos anteriores:
+SIS -> formato FUA
+Otra forma:
+SIS -> Estado de cuenta SIS -> buscar cuenta -> ver datos fua -> imprimir fua 
+
+Reprogramacion medica
+-> consultar en el modulo de consulta externa -> citas y admision
+    buscamos el turno y el doctor para verificar sus programacion y turno 
+-> una vez confirmado los datos: en el menu "Herramientas" -> Reprogramacion medica rellenar los campos que se requieran
+
+/*******************************************************************************************************************************************************/
+15/11/2022: 
+Caso1: Ficha familiar covid
+    -> el paciente requiere ser acompañado por un tutor, pero éste no tiene ficha covid, 
+    se requiere la generacion de su orden covid 
+    Solucion:
+    -> Modulo Laboratorio.
+        -> Pacientes externos lab 
+        -> ***buscar usando los filtros, si no se encuentra*** ->   agregar 
+        -> se abrirá una ventana donde deberemos ingresar el dni del padre para rellenar el formulario (* que el checkbutton sis no esté marcado) 
+        -> seleccionamos doble click sobre el resultado de la consulta hecha al poner el dni 
+        la pestaña paciente se divide en: datos historia clinica, datos de la madre o tutor , datos de domicilio
+            -> datos necesarios: apellido paterno, ap mat, fecha de nacimiento (poner enter para calcular edad)
+            ingresar cel1; en "Datos de la madre o tutor" repetir los datos de la historia clinica, rellenar las direcciones, 
+        
+        -> verificamos que el campo direccion este lleno con varios caracteres, en su defecto le ponemos varios "." 
+        -> llenamos el campo cel 
+        
+        -> nos vamos a la pestaña datos de cuenta -> llenamos el medico con el medico a cargo o que nos digan :v 
+        -> tipo paciente : familiar paciente 
+        -> llenamos el campo cuenta paciente con la cuenta que nos digan :v 
+        -> aceptar y a partir de ahí el médico sabrá llenar el resto ... 
+        
+*para mas referencia del caso : n° cuenta 1670708, zambrano mejia flor
+
+
+caso2: camas pegadas en hospitalizacion
+    -> problemas al querer asignar un paciente a una cama, ya que esa cama está siendo usada 
+    por otro paciente. 
+    -> Hospitalizacion -> camas hospitalizacion -> usar filtros -> modificar -> liberar
+    Solucion practica: 
+        ->Liberar la cama a la que se quiere asignar ese paciente ( si la cama está en uso mover el paciente a otra cama libre )
+
+caso3: Receta pacientes error descarga / algo de una politica de 15 minutos para que el usuario pueda descargarlo
+
+caso4: cambiar estado cama transito a disponible
+neurocirugia 
+    -> se requiere cambiar el estado de la cama de un paciente de UCI
+
+    -> Cuando un paciente en sala va a una atencion  ( *quizas cirugia )
+    esa cama se pone en transito, porque el paciente va a regresar de la atencion
+    en algunos casos ese paciente ya no requiere la cama y se va a su casa, en ese 
+    caso se requiere cambiar el estado de la cama de "transito" a "disponible"
+
+    -> esta modificacion de estados la pueden hacer: el coordinador medico y la jefa de enfermeras
+
+caso5: problema galenhos debido a reintalacion de SO windows 
+    -> pasos para reinstalar:
+        -> copiar los archivos de la carpeta fuente de galenhos a la ubicacion donde se instaló 
+        el galenhos en el disco local del usuario 
+        ubicacion fuente galenhos: \\SRVDB05\sisgalenplus$\Actual\GalenHos
+        ubicacion disco local: C:\Program Files (x86)\Digital Works Corporation\GalenHos
+        -> pegar la fuente del galenhos en la ubicacion del disco local
+        -> abrir cmd -> cd C:\Program Files (x86)\Digital Works Corporation\GalenHos
+                     -> RegisterDLL.bat 
+        -> que termine de cargar y ya está :v                     
+
+caso6: FUA desenlazado farmacia
+    -> SIS -> formato FUA -> buscar por filtros -> modificar -> aceptar 
+    Otra forma:
+    SIS -> Estado de cuenta SIS -> buscar cuenta -> ver datos fua -> imprimir fua 
+
+caso7: Ficha familiar covid
+    -> laboratorio -> pacientes externos lab -> familiar paciente 
+        -> aca no queda claro si buscamos en los filtros o de plano le damos a agregar -> le damos en agregar 
+        -> se abrirá una ventana donde deberemos ingresar el dni del padre para rellenar el formulario
+        -> seleccionamos doble click sobre el resultado de la consulta hecha al poner el dni 
+        -> verificamos que el campo direccion este lleno con varios caracteres, en su defecto le ponemos varios "." 
+        -> llenamos el campo cel 
+        -> nos vamos a la pestaña datos de cuenta -> llenamos el medico con el medico a cargo o que nos digan :v 
+        -> tipo paciente : familiar paciente 
+        -> llenamos el campo cuenta paciente con la cuenta que nos digan :v 
+        -> aceptar y a partir de ahí el médico sabrá llenar el resto ... 
+
+caso8: cambiar estado cama transito a disponible
+    -> Se requiere cambiar el estado de la cama de un paciente de UCI
+
+    -> Cuando un paciente en sala va a una atencion  ( *quizas cirugia )
+    esa cama se pone en transito, porque el paciente va a regresar de la atencion
+    en algunos casos ese paciente ya no requiere la cama y se va a su casa, en ese 
+    caso se requiere cambiar el estado de la cama de "transito" a "disponible"
+
+    -> hospitalizacion -> camas de hospitalizacion -> filtrar por servicio 
+    -> Consultar (solo los perfiles de coordinador medico y jefa de enfermas pueden modificar), liberar cama.
+    -> esta modificacion de estados la pueden hacer: el coordinador medico y la jefa de enfermeras
+
+caso9: consultar paciente
+    -> facturacion -> estado de cuenta -> buscamos por filtros de nombres o por num. de cuenta -> doble click 
+    -> se vizualizará los datos del paciente
+
+    para consultar en que cama está el paciente ( si está hospitalizado ): 
+    -> hospitalizacion -> admision hospitalaria -> nro cta 
+
+
+conteo de casos 15/11/2022:
+1 : consulta paciente
+2 : (1 atendido por chicoma + 1 atendido por eder) cambiar estado cama transito a disponible
+2 : Ficha familiar covid
+2 : FUA desenlazado farmacia
+1 : caso tecnico galenhos
+
+/*******************************************************************************************************************************************************/
+16/11/2022
+
+caso1: consulta de referencias en galenhos
+    -> el usuario no podia encontrar respuestas a su consulta de referencias 
+    -> la consulta se realizaba sin problemas en la pc de otro usuario 
+    -> se solucionó actualizando el galenhos 
+
+/*******************************************************************************************************************************************************/
+17/11/2022
+obs: registrar anexo y nombre del usuario
+ficha covid 
+horario 11.00 - 13.00
+
+caso1: ficha covid 
+    anexo: 1051
+    area: consultorio cardiologia 2
+    usuario: medina rivera nelly MARIA
+    -> no encontraba el paciente en la busqueda al agregar paciente externo laboratorio
+    -> se le indicó que debía desmarcar el checkbox buscar en sis para poder consultar en la reniec si no 
+    se encontraba en la bd sis.
+
+caso2: 
+    anexo: 
+    area: UCI Neurologia 
+    usuario: Chavez Ruiz Diana Elizabeth
+    
+    -> usuario trataba de generar solicitud quirurgica pero no podia seleccionar el radiobutton de "Emergencia"
+    Esto debido a que estaba llenando el formulario equivocado ( "Solicitud Qx" en lugar de "Solicitud Qx Emergencia")    
+    -> solucion: se le indicó la opción adecuada para llenar una solicitud para sala de emergencias de emergencia.
+
+caso3: 
+    anexo: 1040
+    area: 
+    usuario: Chavarri Noria Guido Martin
+    -> Mod: Laboratorio -> Pacientes externos Lab. -> Agregar 
+    -> usuario trataba de generar ficha covid para familiar de paciente con carnet de extranjeria,
+        El campo "Nro Doc" no dejaba ingresar todos los digitos del numero de carnet de extranjeria.
+    -> Ing. Eder indicó que se pueden omitir los '0's iniciales del numero de carnet de extranjeria.
+    -> Se procedió a llenar la ficha ya que los datos no se autocompletan cuando se ingresa un documento
+        que es carnet de extranjeria.
+
+caso4: 
+    anexo: 1045
+    area: 
+    usuario: casamayor barreto alvina Elena
+    -> Usuario no puede generar prueba covid para paciente 
+    -> el usuario intentaba mandar la prueba covid desde: atenciones de consulta externa -> click en el paciente(paciente atendido) -> ordenes medicas 
+    -> solucion: cuando el paciente esta atendido hacer la prueba covid por ordenes medicas 
+        -> se busca al paciente en la opcion: consulta externa -> orden medica 
+        -> dependiendo de si se va a emitir una receta o aun no está en ese proceso:
+                -> agregamos a la receta ( si está elaborandola en ese momento)
+                    -> en la pestaña patologia clinica damos click en la hoja nueva y añadimos la orden para la prueba covid
+                -> en el formulario Agregamos una orden medica (F2)
+                    -> añadimos la historia clinica o los datos del paciente 
+                    -> en la pestaña patologia clinica damos click en la hoja nueva y añadimos la orden para la prueba covid
+
+
+
+/*******************************************************************************************************************************************************/
+/*******************************************************************************************************************************************************/
+18/11/2022
+
+caso1: 
+    anexo: 2141
+    area: 
+    usuario: dra paola
+    -> windows colgado 
+    -> reiniciar la pc
+    
+
+caso2: 
+    anexo: 1022
+    area: imagenes  - sala lectura
+    usuario: 
+    -> consulta ch
+    -> ?
+    
+/*******************************************************************************************************************************************************/
+/*******************************************************************************************************************************************************/
+    
+21/11/2022
+
+caso1: 
+    anexo: 
+    area: 
+    usuario: 
+    -> 1077
+    -> calidad quejas y reclamos
+    -> requeria que se abra la cuenta de un paciente que acababan de darle de alta, 
+    para que pueda ir a una cita (que presumiblemente sacó antes de que lo hospitalizaran)
+    -> sele indicó que por regla no se puede.
+
+
+/*******************************************************************************************************************************************************/
+/*******************************************************************************************************************************************************/
+    
+22/11/2022
+caso1: 
+    anexo: 5810 
+    area: 
+    usuario: 
+
+/*******************************************************************************************************************************************************/
+/*******************************************************************************************************************************************************/
+23/11/2022
+caso1: 
+    anexo: 2108
+    area: odontologia
+    usuario: ramirez bacilio lina
+    -> usuario necesitaba imprimir hoja de atencion de una consulta pasada:
+        -> consulta externa -> registro de atenciones -> filtrar busqueda (a veces x num de cuenta) -> seleccionar registro -> consultar -> seleccionar boton de impresion
+
+caso2: 
+    anexo: 1076
+    area: consulta gastroenterologia 
+    usuario: celi perez maria
+    -> el usuario no podia generar orden de rayos x a un paciente, debido a que tenía una version no actualizada del sistema
+    -> Observación corregida en la version actual de galenHos, se procedió a actualizar el SISGALEN en el equipo de la dra.
+        -> ir a \\SRVDB05\sisgalenplus$\Actual\GalenHos 
+        -> copiar todo y pegar en la pc del usuario en la ruta: C:\Program Files (x86)\Digital Works Corporation\GalenHos
+            <obs: si no te deja reemplazar los archivos fijarse si hay un app  de galenhos pegado en el administrador de tareas.>
+        una vez terminado de copiar:
+        -> abrir cmd -> cd C:\Program Files (x86)\Digital Works Corporation\GalenHos
+                     -> copiar en el cmd : RegisterDLL.bat 
+        -> que termine de cargar y ya está 
+3025
+/*******************************************************************************************************************************************************/
+/*******************************************************************************************************************************************************/
+28/11/2022
+caso2: 
+    anexo: 3081
+    area: hematologia 
+    usuario: cardenas espinoza heidy kuvenka
+    -> queria imprimir FUA
+    ->            
+
+caso3: 
+    anexo: 4015
+    area: quemados triaje 
+    usuario: 
+    -> solicitaba cambiar estado de un paciente atendido hace dias a "no coopera"
+    ->            
+
+1077 
+calidad y quejas 
+paciente con sop de odontologi
+anular sop, para paciente que ya pasó a piso -> pedir en admision eso 
+
+caso 4 : 
+    anexo : 5828
+    trab social Ccasani huaman giovana Genoveva
+    usuario: en el video 
+    -> No podía recategorizar una cuenta 
+
+2048
+banco de sangre 
+correo generar recetas a pacientes referenciados 
+
+
+/*******************************************************************************************************************************************************/
+/*******************************************************************************************************************************************************/
+*para mas referencias: consultar el excel app web soporte al usuario
+
+--------------------------------------
+----- App Web Soporte al Usuario ----- 
+--------------------------------------
+
+1 -> modulo: Hospitalizacion -> Cambiar de estado una cama
+luego de que el paciente es llevado a sala? y querer volver a asignarle cama,
+hay casos en los que la cama que se le asignó está en estado "ocupado" debido a que está apuntando a la cama de ingreso y no a la cama en transito
+
+2 -> modulo: Hospitalizacion -> Anular última transferencia en casos "No llegado al servicio"
+
+
+
+
+1077 quejas y reclamos
+sop ambulatorio odontologia
+quieren ingresar al usuario pero no aparece en el sistema
+-> todo ingreso del paciente es admision 
+
+
+/*******************************************************************************************************************************************************/
+/*******************************************************************************************************************************************************/
+17/12/2022
+error : no permite agregar el triaje, el botón de guardar sale deshabilitado
+cambiar estado de paciente a paso triaje (codigo de estado 3)
+
+select * from Atenciones where idcuentaAtencion = "numero de cuenta"
+--idcuentaAtencion -> numero de cuenta
+--Filtrar tablas por idAtencion
+
+
+select * from Citas where idatencion = 'obtener id atencion de atenciones'
+--Cambiar estado a 3 
+update citas set IdAtencion = 3 where idcita = 'ingresar id de la cita' 
+
+
+saludpol 
+no permite hacer interconsulta para genética
+-
+
+1066
+dra estella 
+/*******************************************************************************************************************************************************/
+/*******************************************************************************************************************************************************/
+
+aperturar cuenta -> modulo facturacion -> estado de cuenta  -> buscar por numero de cuenta
+-> verificar si está cerrado y la fecha de ingreso, 
+-> para abrir una cuenta -> llamar al 1037 
+dar click en abrir cuenta, llenar los campos
+poner: bajo responsabilidad 
+
+/*******************************************************************************************************************************************************/
+/*******************************************************************************************************************************************************/
+21/12/2022
+2048 banco de sangre
+
+1076 gastroener
+celi perez maria
+consulta externa referencias
+
+4013 quemados pasar a triaje
+
+/*******************************************************************************************************************************************************/
+/*******************************************************************************************************************************************************/
+22/12/2022
+caso1: 
+    anexo: 2021
+    area: hematologia 
+    usuario: Aparicio cerna yanira
+    -> queria hacer interconsulta a paciente que cumplió 18 para el día 29/12/2022
+        * como solo se atiende a paciente de 0 a 17 años a este paciente se le hizo una ampliación hasta el dia 27/12/2022
+        * LAS AMPLIACIONES LAS DA DIRECCION
+    -> una ampliación normal se hace de la siguiente forma ( no hacerlo sin aprobación ):
+        -> consulta externa -> autorizacion de adultos 
+
+caso2: 
+    anexo: 2001
+    area: Seguros 
+    usuario: 
+    -> ACTUALIZACION DE TARIFARIO SIS -> CONTACTAR A EDER
+
+
+caso3: 
+    anexo: 2105
+    area: Esp quirurgicas
+    usuario: calderon ayvar ivette gabriela
+    -> queria imprimir FUA
+          > SIS -> Estado de cuenta SIS -> buscar cuenta -> ver datos fua -> imprimir fua        
+
+caso4: 
+    anexo: 2141
+    area: Consultorio Adolescentes 
+    usuario: Dra ruth
+    -> queria imprimir interconsultas
+    ->  ¿? ella sola lo hizo :v
+
+caso5: 
+    anexo: 1051
+    area: gastroenterologia 
+    usuario: 
+    -> teleconsulta pagante 
+        falto hacerle la interconsulta programada para ayer
+        se aperturó la cuenta: 1690369        
+            -> facturacion -> estado de cuenta -> consultar nro Cuenta -> abrir cuenta
+        - Aun asi no se le permite hacer la interconsulta debido a la fecha de la cuenta 
+            ( Pasos para la interconsulta: consulta externa -> orden medica -> agregar n° de cuenta -> agregar (f12) -> agregar numero de cuenta -> llenar pestaña interconsulta
+        -> mensaje de error : "No se puede atender, la fecha de atención del paciente no pertenece a la fecha de hoy o aun no ha sido atendida"
+            **Creo que se resuelve: yendo a registro de atenciones buscar numero de cuenta
+
+
+caso6: 
+    anexo: 1110
+    area: imágenes
+    usuario: 
+    -> Contactar a Eder
+        
+
+caso7: 
+    anexo: 2150
+    area: 
+    usuario: eder
+    toma de respuestas de pruebas moleculares covid
+    -> 
+       
+
+24/12/2022
+
+quemados triaje - 4015 lic. ?
+mendoza bernardo de aguado luz mery
+solo le sale registrado la hoja de referencia de emergencia 
+pero tmbn tiene hoja de referencia de consultorio
+numero dni paciente: 81949204
+nro referencia : 7707208
+opcion: consulta externa -> 7707208
+
+caso8: 
+    anexo: 
+    area: 
+    usuario: 
+    -> 
+
+caso9: 
+    anexo: 
+    area: 
+    usuario: 
+    -> 
+
+caso10: 
+    anexo: 
+    area: 
+    usuario: 
+    ->
+
+
+/*******************************************************************************************************************************************************/
+/*******************************************************************************************************************************************************/
+AtencionesEstanciaHospitalaria
+AtencionesDiagnosticos
+atenciones
+Camas
+Departamentos
+Distritos
+Diagnosticos
+eje
+EstadosCuenta
+FuentesFinanciamiento
+FacturacionCuentasAtencion
+idTipoServicio
+ORDENHOSP
+ordenhospdiagnosticos
+Pacientes
+Provincias
+recetacabecera
+recetadiagnosticos
+reporteoperatorio
+reporteoperatoriodiagnosticos
+SubclasificacionDiagnosticos
+Servicios
+TiposOrigenAtencion
+TiposSexo
+
+
+
+4043
+gnerar interconsulta
+
+examen pedido no tiene precio comunicarse con costos 
+generar cita a rehabilitacion 
+
+
+5002
+
+6503 -> hosp pediatricas
+dra chavez 
+intentaba dar alta 
+-> aparece que el paciente fue dado de baja 
+pc: lpep3
+
+
+2115
+no pueden imprimir 
+nro cuaneta 1687598
+
+
+habilitar consuyltorio 
+condori ibarra rita 
+consulta externa registro de atenciones -> habilitar los permisos }
+correo a soporte informatico con copia a su jefatura
+
+a todos los servicios 
+consulta externa 
+06894 
+61 
+flores urrino 
+
+1051 consultorio gastro 
+anular receta dia 22
+lizado jaquelin nelly
+
+04164

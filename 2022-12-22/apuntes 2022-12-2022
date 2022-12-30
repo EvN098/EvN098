@@ -1,0 +1,20 @@
+pendientes por hacer: terminar la documentacion
+
+/********************************************************************************************************************/
+/********************************************************************************************************************/
+centro de costo: 
+unidad - subunidad - centro de costo
+
+"Buenos días,
+Por encargo del Dr. Trigoso, Jefe de Dpto. de la SUAIEPCNP,  se solicita Información del consumo mensual en el centro de costos de Neonatología de "paracetamol 10 mg/mL 100 mL inyectable"(Cod SISMED 34998), desde noviembre 2021 hasta octubre 2022, dado que debemos sustentar y actualizar el uso del medicamento en mención frente al comité farmacoterapeutico.
+Agradeciendo su atención."
+
+Erick, los scripts están en la siguiente ruta:
+"\\SRVDB05\desarrollo$\0-Scripts$\7-Farmacia\Reporte de Consumo - Anualizado"
+
+El que debes ver es el: Reporte Por CCosto Años v2
+
+centro costos del query: "unidad - subnidad - Centro de costo"
+/********************************************************************************************************************/
+/********************************************************************************************************************/
+

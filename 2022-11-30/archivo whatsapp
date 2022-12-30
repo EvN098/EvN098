@@ -1,0 +1,157 @@
+Private Declare Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" (ByVal hWnd As Long, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long
+Private Declare Function SetForegroundWindow Lib "user32" (ByVal hWnd As Long) As Long
+Private Declare Function FindWindow Lib "user32" Alias "FindWindowA" _
+        (ByVal lpClassName As String, _
+        ByVal lpWindowName As String) As Long
+Private Declare Function ShowWindow Lib "user32" _
+    (ByVal hWnd As Long, ByVal nCmdShow As Long) As Long
+Private Declare Function BlockInput Lib "user32" (ByVal fBlock As Long) As Long
+Private Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
+
+
+Private Sub btnEnviar_Click()
+    Dim numPhone As String
+    Dim messageText As String
+    Dim rutaArchivo As String
+    
+    Dim dirPdf As String
+    Dim url As String
+    Dim x
+    Dim REGRE
+    Dim documento As String
+    Dim lt As String
+    Dim lhwnd As Long
+    Dim WshShell As Object
+    
+    numPhone = txt_num.Text
+    messageText = txt_message.Text
+    
+    If numPhone = "" Then
+        numPhone = "950446256"
+    End If
+    
+    If messageText = "" Then
+        messageText = "Mensaje%20de%20prueba"
+    Else
+        messageText = Replace(messageText, " ", "%20")
+    End If
+    
+    If messageText = "" Then
+        messageText = "Mensaje%20de%20prueba"
+    Else
+        messageText = Replace(messageText, " ", "%20")
+    End If
+
+'   url = "https://api.whatsapp.com/send?phone=+51" + numPhone + "&text=" + messageText
+    url = "https://api.whatsapp.com/send?phone=+51" + numPhone + "&text=" + messageText + "&type=phone_number&app_absent=0"
+'   Call Shell("explorer.exe ")
+'   reval = Shell("C:\Archivos de programa\Google\Chrome\Application\chrome.exe -url https://api.whatsapp.com/send?phone=+51" + numPhone + "&text=Mensaje%20de%20prueba", vbNormalFocus)
+  
+'    x = ShellExecute(Me.hWnd, "Open", "chrome.exe", "https://api.whatsapp.com/send?phone=+51" + numPhone + "&text=Mensaje%20de%20prueba", &O0, SW_NORMAL)
+    x = ShellExecute(Me.hWnd, "Open", "chrome.exe", url, &O0, SW_NORMAL)
+    
+    Sleep 5000
+'   REGRE = Shell("C:\Program Files\WhatsApp.exe", 1)
+    
+    lt = "WhatsApp.exe"
+    lhwnd = FindWindow(0, lt)
+    
+
+    Set WshShell = CreateObject("wscript.shell")
+    
+    documento = "C:\Users\eramoss\Downloads\reporteoperatorio 1.pdf"
+    
+    WshShell.SendKeys "^f"
+    Sleep 2000
+    
+    Dim i As Integer
+        
+    For i = 1 To 3
+        WshShell.SendKeys "+{TAB}"
+        Sleep 200
+    Next
+'    WshShell.SendKeys "+{TAB}"
+'    Sleep 200
+'    WshShell.SendKeys "+{TAB}"
+'    Sleep 200
+'    WshShell.SendKeys "+{TAB}"
+'    Sleep 200
+'    WshShell.SendKeys "{ENTER}"
+'    Sleep 200
+'    WshShell.SendKeys "{ENTER}"
+'    Sleep 200
+
+    For i = 1 To 2
+        WshShell.SendKeys "{ENTER}"
+        Sleep 200
+    Next
+    
+    WshShell.SendKeys "C:\Users\eramoss\Downloads\reporteoperatorio 1.pdf"
+    Sleep 500
+    
+    For i = 1 To 2
+        WshShell.SendKeys "{ENTER}"
+        Sleep 500
+    Next
+    
+    For i = 1 To 2
+        WshShell.SendKeys "{TAB}"
+        Sleep 200
+    Next
+    
+'    Sleep 600
+'    WshShell.SendKeys "{ENTER}"
+'    Sleep 600
+'    WshShell.SendKeys "{ENTER}"
+'    Sleep 400
+'    WshShell.SendKeys "{TAB}"
+'    Sleep 200
+'    WshShell.SendKeys "{TAB}"
+'    Sleep 200
+    WshShell.SendKeys "{ENTER}"
+    Sleep 200
+    
+    For i = 1 To 2
+        WshShell.SendKeys "{TAB}"
+        Sleep 200
+    Next
+    
+'    WshShell.SendKeys "{TAB}"
+'    Sleep 200
+'    WshShell.SendKeys "{TAB}"
+'    Sleep 200
+'    MsgBox ("Proceso terminado")
+
+
+''REGRE = Shell("C:\Program Files\WhatsApp.exe", 1)
+''    C:\Program Files\WindowsApps\5319275A.WhatsAppDesktop_2.2245.5.0_x64__cv1g1gvanyjgm
+
+
+''    Dim WshShell As Object
+''    Set WshShell = CreateObject("wscript.shell")
+'
+'
+''    WshShell.SendKeys "{ENTER}"
+'
+''    MsgBox ("Whatsapp " + CStr(lhwnd))
+''If lhwnd<> 0 Then
+''    SetForegroundWindow (lhwnd)
+''    Call ShowWindow(0, 1)
+'''        ShowWindow(0, 1)
+''        ox = CreateObject("Wscript.Shell")
+''        ox.SendKeys "{ENTER}"
+''
+''
+''Else
+''        MsgBox("Whatsapp is not activated!")
+''End If
+'
+''    Call ShellExecute(0&, vbNullString, ms_rutaRespuestaMail & "/respuesta?token=" & ms_cripta, vbNullString, vbNullString, vbNormalFocus)
+'
+''    ox = CreateObject("Wscript.Shell")
+'
+'
+''    ox.SendKeys "{TAB}"
+'
+''    ox.SendKeys "{ENTER}"
+End Sub

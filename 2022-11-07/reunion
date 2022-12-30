@@ -1,0 +1,14 @@
+"Create table HOSPCARDIO ([idAprobadoQx] Text,[idSolicitudQx] Text)"
+
+"Create table HOSP_CIRU_PED ([TipoServicio] Text,[IDReceta] Text,[Items] Text)"
+
+cambiar en el excel: 
+ancho 18
+alinear texto 
+centrado
+
+si el rango es 0 poner guion "-"
+
+--
+Actualizar pdf itext
+el pdf se carga desde la base de datos, se busca tener que cargar ese pdf , añadirle unas variables en la cabecera y en el pie de pagina a ese pdf 

@@ -1,0 +1,16 @@
+apuntes 2022-12-29
+
+-Automatizar las alertas en el servidor 33 con los usuarios registrados
+-agregar el correo de cmunante a la lista de destinatarios para la alerta de hospitalizacion
+
+-se agregaron las alertas en la tabla TabAlertaMensajeria
+  - 4 > MOVIMIENTO MENSUAL FARMACIA
+  - 5 > PRODUCCION DE IMAGENES POR PUNTO DE CARGA
+
+-se agregaron los usuarios en la tabla TabAlertaMensajeriaDestintarios:
+  insert into TabAlertaMensajeriaDestinatarios values ('3',2308,'to','cmunante@insnsb.gob.pe',null,1)
+  insert into TabAlertaMensajeriaDestinatarios values ('3',2314,'cc','dlozano@insnsb.gob.pe',null,1)
+  insert into TabAlertaMensajeriaDestinatarios values ('4',3953,'to','laranda@insnsb.gob.pe',null,1)
+  insert into TabAlertaMensajeriaDestinatarios values ('4',2214,'cc','epalomino@insnsb.gob.pe',null,1)
+  insert into TabAlertaMensajeriaDestinatarios values ('4',2314,'cc','dlozano@insnsb.gob.pe',null,1)
+  

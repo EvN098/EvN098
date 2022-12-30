@@ -1,0 +1,75 @@
+--Buscar nombre columna en tablas 
+SELECT TABLE_NAME, COLUMN_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME LIKE '%saldo%'
+ORDER BY COLUMN_NAME
+
+
+--tablas para saldo:
+select * from farmSaldo
+select * from farmAlmacen
+select * from FactCatalogoBienesInsumos
+select * from farmTipoSalidaBienInsumo
+select * from farmSaldo
+
+select * from FactCatalogoBienesInsumos where nombre like '%de espuma hidro%'
+select * from FactCatalogoBienesInsumos where nombre like '%APàSITO%'
+
+select idproducto from FactCatalogoBienesInsumos where nombre like '%APàSITO%'
+
+
+select  * from FactCatalogoBienesInsumos where idproducto = '43888'
+
+update FactCatalogoBienesInsumos set nombre = REPLACE( nombre, 'APàSITO', 'APOSITO') where idproducto in (select idproducto from FactCatalogoBienesInsumos where nombre like '%APàSITO%')
+
+select REPLACE( nombre, 'APàSITO', 'APOSITO'), IdProducto from FactCatalogoBienesInsumos 
+where idproducto in (select idproducto from FactCatalogoBienesInsumos where nombre like '%APàSITO%')
+
+
+
+
+
+/******************************************************************************************************************************************************************************************************************/
+--Query Suspensiones para Neumologia y Gastroenterología 2022
+
+select 
+	sq.idSuspension,
+	sq.idAprobadoQx,
+	sq.NroSuspension,
+	--sq.idCuentaAtencion,
+	case 
+		when sq.idcuentaatencion is null then sqx.idcuentaatencion 
+		else sq.idcuentaatencion 
+	end as IdCuentaAtencion,
+	sq.idPaciente,
+	isnull(pc.ApellidoPaterno,'') + ' ' + isnull(pc.ApellidoMaterno,'') + ' ' + isnull(pc.PrimerNombre,'') + ' ' + isnull(pc.SegundoNombre,'') + ' ' +ISNULL(pc.tercernombre,'') as paciente,
+	sq.FechaSuspende,
+	sq.HoraSuspende,
+	sq.idMotivo,
+	msq.Descripcion as DescripcionMotivo,
+	tmqx.idtipomotivoSuspensionqx,
+	tmqx.Descripcion as descripcionTipoMotivo,
+	sq.Observacion,
+	sq.idMedicoSuspende,
+	isnull(emp.ApellidoPaterno,'')+' '+isnull(emp.ApellidoMaterno,'')+' '+isnull(emp.Nombres,'') as MedicoSuspende,
+	sq.idEstado,
+	sqx.IdEspecialidadOpera,
+	eqx.Nombre as NombreEspecialidad
+from
+SuspensionQx sq
+left join MotivosSuspensionQx msq		on sq.idMotivo = msq.idMotivo
+left join medicos med					on med.IdMedico = sq.idMedicoSuspende
+left join empleados emp					on emp.IdEmpleado = med.IdEmpleado
+left join AprobadosQx aqx				on aqx.idAprobadoQx = sq.idAprobadoQx
+left join SolicitudQx sqx				on sqx.idSolicitudQx = aqx.idSolicitudQx 
+left join EspecialidadQx eqx			on eqx.idEspecialidad = sqx.IdEspecialidadOpera
+left join Pacientes pc					on pc.IdPaciente = sq.idPaciente
+left join TipoMotivoSuspensionQx tmqx	on tmqx.idTipoMotivoSuspensionQx = msq.idTipoMotivoSuspensionQx
+where sq.FechaSuspende >= '2022-01-01'
+and eqx.idEspecialidad in ('21','20')
+
+
+
+/*********************************************************************************************************************************************************************************************/
+--Query para actualizar el nombre de los productos que aparecen con el nombre de aposito
+update FactCatalogoBienesInsumos set nombre = REPLACE( nombre, 'APàSITO', 'APOSITO') where idproducto in (select idproducto from FactCatalogoBienesInsumos where nombre like '%APàSITO%')​

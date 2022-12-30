@@ -1,0 +1,17 @@
+2022-12-01 apuntes:
+
+--que edder me enseñe un proceso para la trama de salud pol
+    -> hecho, se explicó rapidamente el proceso:
+        -> se recibe un excel por correo el cual contiene data que edder filtra, actualiza y ordena en la bd para posteriormente acomodarlo en un excel
+        -> este proceso se realiza solo en la primera de las 4 tramas que le son enviadas en ese excel, ( una trama es la data contenida )
+        -> una vez terminado el proceso se guarda el excel en un texto plano separado por palotes y adjuntados para responder al correo inicial
+        
+
+-- store que creo el programador: LSP_PACIENTES_LIST
+
+cambiar la posicion de la columna cama, que aparezca antes
+    -> hecho
+enviar el reporte a las 10am hasta que se indique lo contrario
+    -> Hecho
+
+-- duracion del examen de javier : 11.40 - 17.00

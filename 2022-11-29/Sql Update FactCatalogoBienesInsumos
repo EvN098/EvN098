@@ -1,0 +1,26 @@
+
+--Update para corregir errores de caracter convertidos en FactCatalogoBienesInsumos
+
+--Update para reemplazar caracteres  (E), Ö (I) , à (O), é (U)
+update FactCatalogoBienesInsumos set nombre = REPLACE(REPLACE(REPLACE(REPLACE( nombre 
+	COLLATE SQL_Latin1_General_CP1_CS_AS, 'é', 'U')  
+		COLLATE SQL_Latin1_General_CP1_CS_AS , 'à', 'O') 
+			COLLATE SQL_Latin1_General_CP1_CS_AS, 'Ö', 'I') 
+				COLLATE SQL_Latin1_General_CP1_CS_AS, '', 'E') 
+
+/******************************************************************************************/
+
+--Update para reemplazar caracter µ (A), dividido en tres updates ( necesario para filtrar las unidades: µg, µL, µm)
+update  FactCatalogoBienesInsumos set nombre = REPLACE(REPLACE(REPLACE (REPLACE (REPLACE (REPLACE (REPLACE(REPLACE(REPLACE( nombre 
+	COLLATE SQL_Latin1_General_CP1_CS_AS, ' µg ', ' @@g ') 
+		COLLATE SQL_Latin1_General_CP1_CS_AS,' µg/' ,' @@g/' ) 
+			COLLATE SQL_Latin1_General_CP1_CS_AS,'/µg ' ,'/@@g ' )    
+				COLLATE SQL_Latin1_General_CP1_CS_AS,' µL ', ' @@L ' )  
+					COLLATE SQL_Latin1_General_CP1_CS_AS,' µL/', ' @@L/' )
+						COLLATE SQL_Latin1_General_CP1_CS_AS,'/µL ', '/@@L ' )
+							COLLATE SQL_Latin1_General_CP1_CS_AS,' µm ', ' @@m ' )
+								COLLATE SQL_Latin1_General_CP1_CS_AS,' µm/', ' @@m/' )
+									COLLATE SQL_Latin1_General_CP1_CS_AS,' /µm', ' /@@m' )
+
+update FactCatalogoBienesInsumos set nombre = REPLACE( nombre, 'µ', 'A')
+update FactCatalogoBienesInsumos set nombre = REPLACE( nombre , '@@', 'µ')

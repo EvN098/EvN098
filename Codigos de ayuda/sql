@@ -1,0 +1,28 @@
+--Comando para instalar NetFx3 en sql server: 
+--entrar a cmd como administrador, pegar:
+DISM /Online /Enable-Feature /FeatureName:NetFx3 /All /LimitAccess /Source:d:\sources\sxs
+
+--Buscar nombre columna en tablas 
+SELECT TABLE_NAME, COLUMN_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE COLUMN_NAME LIKE '%campoAbuscar%'
+ORDER BY COLUMN_NAME
+
+--Listar Columnas de una tabla 
+select COLUMN_NAME
+from INFORMATION_SCHEMA.COLUMNS
+where TABLE_SCHEMA = 'dbo'
+and TABLE_NAME = 'nombretabla'
+order by ORDINAL_POSITION
+
+--Insertar datos de un select
+INSERT INTO table2 (column1, column2, column3, ...)
+SELECT column1, column2, column3, ...
+FROM table1
+WHERE condition;
+
+
+SCRIPT - tabla-dignosticos-generales.sql
+-> contexto de las tablas que contienen diagnosticos 
+
+

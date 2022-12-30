@@ -1,0 +1,38 @@
+Apuntes 2022-12-14
+Pendientes:
+- Terminar la documentacion de firma digital en centro quirurgico
+- Avanzar la documentación de la bandeja de requerimientos
+- Exposición del aplicativo de reportes de hospitalizacion
+
+- Requerimiento
+- Actas de Reunion
+- Diagrama de base de datos -> Diccionario de datos
+- Pases a produccion
+- Control de calidad  
+
+- Mañana cierra kanban
+
+dra 
+Rojas?
+
+--columnas presentes en casi todos
+idpaciente
+idservicio
+idcuentaatencion
+idmedico
+
+movfirmadigitalproceso .-> movprefirmadifital
+movFirmaDigitalProceso- > añadir numeradorProceso
+
+tabformatodigital -> prefirma y firma
+
+tabtipoprocesodigital -> prefirma t firma
+
+
+refcon -> manejado con pestañas
+
+
+hablar con chicoma para generar las actas de reunion 
+
+
+
